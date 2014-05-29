@@ -3,7 +3,8 @@
 #include <map>
 #include "Graph.h"
 
-//PP means the propagation probability between nodes;
+//PP means the propagation probability between nodes; 
+//and in this file, propagation probability between nodes among multiple networks will be calculated.
 class PP
 {
 private:
