@@ -42,6 +42,7 @@ void Graph::inputNet()
 			}
 		}
 	}
+	netInfo.net_inf=this->net_inf;
 }
 
 //build the graph of the network, which store the edge information in or among networks. 
@@ -99,6 +100,7 @@ void Graph::buildGraph()
 		}
 	}
 
+
 	for(int i=1;i<=this->net_num;i++)
 	{
 		for(int j=1;j<=this->net_num;j++)
@@ -130,6 +132,12 @@ void Graph::buildGraph()
 			}
 		}
 	}
+
+	//存储对应的信息到netInfo里
+	netInfo.net_node_set=this->net_node_set;
+	netInfo.node_set=this->node_set;
+	netInfo.nodes=this->nodes;
+	netInfo.edges=this->edges;
 }
 
 void Graph::printGraph()
@@ -138,7 +146,7 @@ void Graph::printGraph()
 	std::cout<<"graph information: "<<std::endl;
 	for(int i=0;i<edges.size();i++)
 	{
-		std::cout<<edges[i].u<<"\t"<<edges[i].v<<"\t"<<edges[i].w1<<"\t"<<edges[i].w2<<"\t"<<std::endl;//edges[i].net_u<<"\t"<<edges[i].net_v<<std::endl;
+		std::cout<<edges[i].u<<"\t"<<edges[i].v<<"\t"<<edges[i].w1<<"\t"<<edges[i].w2<<"\t"<<std::endl;
 	}
 	//std::cout<<"there are total "<<nodes.size()<<" nodes!"<<std::endl;
 	/*std::cout<<"node and its corresponding set: "<<std::endl;
@@ -162,4 +170,9 @@ void Graph::printGraph()
 		std::cout<<iternet->first<<"\t"<<iternet->second<<std::endl;
 		iternet++;
 	}*/
+}
+
+NETINFO Graph::getNetInfo()
+{
+	return this->netInfo;
 }
