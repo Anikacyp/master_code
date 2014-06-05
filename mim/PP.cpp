@@ -8,7 +8,11 @@ void PP::setNetInfo(NETINFO ntf)
 	this->netInfo=ntf;
 }
 
-void PP::infProbCal()
+void PP::indexing()
 {
 	
+}
+void PP::infProbCal()
+{
+		
 }

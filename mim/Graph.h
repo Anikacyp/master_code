@@ -12,10 +12,17 @@
 	like the node's degree, the propagation probability
 
 */
+struct Node
+{
+	int node_ID;
+	int net_ID;
+};
+
 struct Edge
 {
 	//int u,v;
-	std::string u,v;
+	//std::string u,v;
+	Node u,v;
 	//int net_u,net_v;
 	double w1, w2;
 };
@@ -36,7 +43,8 @@ struct NETINFO
 	std::vector<Edge> edges;
 	std::map<std::string,double> net_inf;
 	std::set<int> nodes;
-	std::map<int,std::set<std::string> >node_set;
+	//std::map<int,std::set<std::string> >node_set;
+	std::map<int,std::set<int> > node_set;
 	std::map<int,std::set<int> >net_node_set;
 };
 
@@ -51,7 +59,9 @@ private:
 
 	static std::set<int> nodes;
 
-	static std::map<int,std::set<std::string> > node_set;
+	//static std::map<int,std::set<std::string> > node_set;
+
+	static std::map<int, std::set<int> > node_set;
 
 	static std::map<int,std::set<int> > net_node_set;	
 

@@ -10,15 +10,22 @@ struct InfProb
 	double w;
 	std::set<std::string> pathes;
 };
+
+struct InfPath
+{
+	
+};
+
 class PP
 {
 private:
 	NETINFO netInfo;
-	map<
+
 public:
 	PP();
 	~PP();
 	void setNetInfo(NETINFO ntf);
+	void indexing();
 	void infProbCal();
 	void DFS();
 };
