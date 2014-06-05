@@ -18,6 +18,24 @@ struct Node
 	int net_ID;
 };
 
+
+/*bool operator==(Node n1,Node n2)
+{
+	if((n1.node_ID==n2.node_ID) && (n1.net_ID==n2.net_ID))
+		return true;
+	else
+		return false;
+}
+
+bool operator<(Node n1, Node n2)
+{
+	if(n1.node_ID<n2.node_ID)
+		return true;
+	else
+		return false;
+}*/
+
+
 struct Edge
 {
 	//int u,v;

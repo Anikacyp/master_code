@@ -1,18 +1,18 @@
 #ifndef PP_H
 #define PP_H
 #include <map>
-#include <set>
+//#include <set>
 #include <vector>
 #include "Graph.h"
 
 struct arcNode
 {
 	Node node;
-	float weight=0;
-	arcNode * next;
+	float weight;
+	/*arcNode * next;
 	arcNode(){}
 	arcNode(Node v, float w): node(v), weight(w), next(NULL){}
-	arcNode(Node v):node(v),weight(0),next(NULL){}
+	arcNode(Node v):node(v),weight(0),next(NULL){}*/
 };
 
 struct InfProb
@@ -35,8 +35,8 @@ private:
 	6. std::map<int,std::set<int> >net_node_set;
 	*/
 	NETINFO netInfo;
-	std::map<Node, std::vector<Node> > AdjChild;
-	std::map<Node, std::vector<Node> > AdjParent;
+	std::map<std::string, std::vector<arcNode> > AdjForward;
+	std::map<std::string, std::vector<arcNode> > AdjBackward;
 
 public:
 	PP();
