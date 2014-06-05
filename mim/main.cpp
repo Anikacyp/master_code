@@ -7,6 +7,9 @@ int main(int argc, char * argv[])
 	graph->inputNet();
 	graph->buildGraph();
 	graph->printGraph();
+	PP *pp=new PP();
+	pp->setNetInfo(graph->getNetInfo());
+	pp->infProbCal();
 	delete graph;	
 	return 0;
 }

@@ -40,6 +40,7 @@ struct NETINFO
 	的值为对应的点ID+网络ID
 	5.net_node_set:存储了每个网络中所含有的点集合，key为网络ID，value为一个set，存储点ID。
 	*/
+	int net_num;
 	std::vector<Edge> edges;
 	std::map<std::string,double> net_inf;
 	std::set<int> nodes;

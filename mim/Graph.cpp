@@ -9,6 +9,7 @@ std::map<int,std::set<int> > Graph::net_node_set;
 Graph::Graph(int file_num)
 {
 	this->net_num=file_num;
+	netInfo.net_num=this->net_num;
 }
 
 Graph::~Graph(){}
@@ -154,7 +155,8 @@ void Graph::printGraph()
 	std::cout<<"graph information: "<<std::endl;
 	for(int i=0;i<edges.size();i++)
 	{
-		std::cout<<edges[i].u.node_ID<<"@"<<edges[i].u.net_ID<<"\t"<<edges[i].v.node_ID<<"@"<<edges[i].v.net_ID<<"\t"<<edges[i].w1<<"\t"<<edges[i].w2<<"\t"<<std::endl;
+		std::cout<<edges[i].u.node_ID<<"@"<<edges[i].u.net_ID<<"\t"
+		<<edges[i].v.node_ID<<"@"<<edges[i].v.net_ID<<"\t"<<edges[i].w1<<"\t"<<edges[i].w2<<"\t"<<std::endl;
 	}
 	//std::cout<<"there are total "<<nodes.size()<<" nodes!"<<std::endl;
 	std::cout<<"node and its corresponding set: "<<std::endl;
