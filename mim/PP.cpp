@@ -7,6 +7,7 @@ PP::~PP(){}
 void PP::setNetInfo(NETINFO ntf)
 {
 	this->netInfo=ntf;
+    this->node_set=this->netInfo.node_set;
 	this->indexing();
 }
 
@@ -61,7 +62,7 @@ void PP::indexing()
 
 		//----------------逆向存储每个点u的邻接表：即有哪些点进入点u----------------//
 
-
+		
 
 
 		iter++;
@@ -69,7 +70,7 @@ void PP::indexing()
 
 
 
-	std::map<std::string, std::vector<arcNode> >::iterator iter1=AdjForward.begin();
+	/*std::map<std::string, std::vector<arcNode> >::iterator iter1=AdjForward.begin();
 	while(iter1!=AdjForward.end())
 	{
 		std::cout<<iter1->first<<": \t"<<std::endl;
@@ -79,14 +80,40 @@ void PP::indexing()
 			std::cout<<tmp[i].node.node_ID<<"_"<<tmp[i].node.net_ID<<"\t"<<tmp[i].weight<<std::endl;
 		}
 		iter1++;
-	}
+	}*/
 }
-void PP::infProbCal()
+double PP::infProbCal(int nodeA,int nodeB)
 {
-		
+    std::set<int> setA;
+    std::set<int> setB;
+    double infval;
+    if(this->node_set.count(nodeA))
+        setA=this->node_set[nodeA];
+    if(this->node_set.count(nodeB))
+        setB=this->node_set[nodeB];
+    int sizeA=setA.size();
+    int sizeB=setB.size();
+    int totalInfNum=sizeA*sizeB;
+    
+    std::set<int>::iterator iterA=setA.begin();
+    std::set<int>::iterator iterB=setB.begin();
+    while(iterB!=setB.end())
+    {
+        Node u=Node(nodeB,*iterB);
+        iterA=setA.begin();
+        while (iterA!=setA.end()) {
+            Node v=Node(nodeA,*iterA);
+            std::cout<<v.node_ID<<"_"<<v.net_ID<<"\t"<<u.node_ID<<"_"<<u.net_ID<<std::endl;
+            //计算点的传播概率，并记录传播路径
+            subinf(u,v);
+            iterA++;
+        }
+        iterB++;
+    }
+    return infval;
 }
 
-void PP::DFS()
+double PP::subinf(Node nodeA,Node nodeB)
 {
-
+    
 }

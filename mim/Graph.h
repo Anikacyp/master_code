@@ -16,6 +16,8 @@ struct Node
 {
 	int node_ID;
 	int net_ID;
+    Node(int nid,int netid):node_ID(nid),net_ID(netid){}
+    Node(){}
 };
 
 

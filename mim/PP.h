@@ -37,6 +37,7 @@ private:
 	NETINFO netInfo;
 	std::map<std::string, std::vector<arcNode> > AdjForward;
 	std::map<std::string, std::vector<arcNode> > AdjBackward;
+    std::map<int,std::set<int> > node_set;
 
 public:
 	PP();
@@ -45,8 +46,8 @@ public:
 	void setNetInfo(NETINFO ntf);
 	void indexing();
 
-	void infProbCal();
-	void DFS();
+	double infProbCal(int nodeA,int nodeB);
+	void subinf(Node nodeA,Node nodeB);
 };
 
 #endif
