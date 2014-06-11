@@ -14,7 +14,7 @@ void PP::setNetInfo(NETINFO ntf)
 
 void PP::adjTable()
 {
-    AdjForward.clear();
+    adjIn.clear();
     //按照邻接表存储图结构，分别从正向和反向进行存储
     //其中key值按照node_ID+"_"+net_ID进行存储
 	std::vector<Edge> edges=netInfo.edges;
@@ -42,29 +42,29 @@ void PP::adjTable()
 		//tmpNode.weight=w1;
 
        
-		if(AdjForward.count(keyu))
+		if(adjIn.count(keyu))
 		{
-			AdjForward[keyu].push_back(tmpNode);
+			adjIn[keyu].push_back(tmpNode);
 		}
 		else
 		{
 			tmpvec.clear();
 			tmpvec.push_back(tmpNode);
-			AdjForward[keyu]=tmpvec;
+			adjIn[keyu]=tmpvec;
 		}
         
 		//存储key为keyv的点信息
 		tmpNode.node=u;
 		tmpNode.weight=w2;
-		if(AdjForward.count(keyv))
+		if(adjIn.count(keyv))
 		{
-			AdjForward[keyv].push_back(tmpNode);
+			adjIn[keyv].push_back(tmpNode);
 		}
 		else
 		{
 			tmpvec.clear();
 			tmpvec.push_back(tmpNode);
-			AdjForward[keyv]=tmpvec;
+			adjIn[keyv]=tmpvec;
 		}
 
 		//----------------逆向存储每个点u的邻接表：即有哪些点进入点u----------------//
@@ -126,15 +126,11 @@ void PP::infProbCal()
 
 void PP::MPP(int node_id)
 {
-    //Node node;
     if(this->nodes.count(node_id))
     {
         std::set<int> setN=node_set[node_id];
         std::set<int>::iterator iter=setN.begin();
         while (iter!=setN.end()) {
-            //std::cout<<node_ID<<"\t"<<*iter<<std::endl;
-            //node.node_ID=node_ID;
-            //node.net_ID=*iter;
             Dijkstra(node_id,*iter);
             iter++;
         }
@@ -146,8 +142,8 @@ void PP::MPP(int node_id)
 void PP::Dijkstra(int node_id, int net_id)
 {
     std::string tkey=std::to_string(node_id)+"_"+std::to_string(net_id);
-    if (AdjForward.count(tkey)) {
-        std::vector<arcNode> tmpvec=AdjForward[tkey];
+    if (adjIn.count(tkey)) {
+        std::vector<arcNode> tmpvec=adjIn[tkey];
         //std::cout<<node_id<<"\t"<<net_id<<"\t"<<tmpvec.size()<<std::endl;
         double minval=(double)0.0;
         Node nextNode;
