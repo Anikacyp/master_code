@@ -11,13 +11,18 @@ int main(int argc, char * argv[])
 	graph->inputNet();
 	graph->buildGraph();
     
+    std::cout<<"hello"<<std::endl;
+    GraphIndexer *graphindexer=new GraphIndexer(graph->getNetInfo());
+    //graphindexer->setNetInfo(graph->getNetInfo());
+    graphindexer->indexing();
     
-	PP *pp=new PP();
-	pp->setNetInfo(graph->getNetInfo());
-    pp->infProbCal();
+	//PP *pp=new PP();
+	//pp->setNetInfo(graph->getNetInfo());
+    //pp->infProbCal();
     
     
-    delete pp;
+    //delete pp;
+    delete graphindexer;
 	delete graph;	
 	/*
 	std::srand(unsigned(time(0)));

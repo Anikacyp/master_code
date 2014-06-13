@@ -27,6 +27,7 @@ typedef struct AdjNode
     int net_ID;
    // EdgeNode * firstEdge;
     std::vector<EdgeNode> edgenodes;
+    //AdjNode(){}
 }AdjNode;
 
 class GraphIndexer
@@ -43,6 +44,7 @@ public:
     GraphIndexer(NETINFO ninfo);
     GraphIndexer();
     ~GraphIndexer();
+    void setNetInfo(NETINFO ninfo);
     void indexing();
 };
 
