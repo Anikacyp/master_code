@@ -11,10 +11,10 @@ int main(int argc, char * argv[])
 	graph->inputNet();
 	graph->buildGraph();
     
-    std::cout<<"hello"<<std::endl;
     GraphIndexer *graphindexer=new GraphIndexer(graph->getNetInfo());
     //graphindexer->setNetInfo(graph->getNetInfo());
-    graphindexer->indexing();
+    graphindexer->adjTable();
+    graphindexer->infCal();
     
 	//PP *pp=new PP();
 	//pp->setNetInfo(graph->getNetInfo());
