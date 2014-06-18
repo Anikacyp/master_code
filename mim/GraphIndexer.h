@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef GraphIndexer__
-#define GraphIndexer__
+#ifndef GRAPHINDEXER_H
+#define GRAPHINDEXER_H
 #include <map>
 #include <vector>
 #include <iostream>
@@ -15,40 +15,36 @@
 
 typedef struct EdgeNode
 {
-    int node_ID;
-    int net_ID;
+    Node dest;
     double weight;
     //struct EdgeNode *next;
+    EdgeNode(Node node,double w):dest(node),weight(w){}
+    EdgeNode(){}
 }EdgeNode;
 
 
 typedef struct AdjNode
 {
-    int node_ID;
-    int net_ID;
+    Node source;
    // EdgeNode * firstEdge;
     std::vector<EdgeNode> edgenodes;
-    //AdjNode(){}
+    AdjNode(){}
 }AdjNode;
 
-struct MPP
+/*struct MPP
 {
     //Node source;
     Node dest;
+    //double max_weight;
     std::vector<EdgeNode> path;
     MPP(){}
-    bool operator <(const MPP& mpp1)
-    {
-        return dest.node_ID<mpp1.dest.node_ID;
-    }
-};
+};*/
 
 
 class GraphIndexer
 {
     
 private:
-    //std::map<std::string,int> headIndex;
     std::map<Node,int> headIndex;
     std::vector<AdjNode> adjnodes;
     
@@ -61,7 +57,8 @@ private:
     
     //propagation probability
     std::map<Node,std::map<Node,double> > infMap;
-    std::map<Node,MPP> infPath;
+    std::map<Node,std::map<Node,std::vector<EdgeNode> > > infPath;
+    std::set<Node> S;
     
 public:
     GraphIndexer(NETINFO ninfo);
@@ -70,7 +67,8 @@ public:
     void setNetInfo(NETINFO ninfo);
     void adjTable();
     void infCal();
-    void Dijkstra(int node_ID, int net_ID);
+    int Dijkstra(Node source,Node tmp,int num);
+    void prints();
 };
 
 #endif /* defined(__mnim__GraphIndexer__) */

@@ -12,16 +12,9 @@ int main(int argc, char * argv[])
 	graph->buildGraph();
     
     GraphIndexer *graphindexer=new GraphIndexer(graph->getNetInfo());
-    //graphindexer->setNetInfo(graph->getNetInfo());
-    graphindexer->adjTable();
     graphindexer->infCal();
-    
-	//PP *pp=new PP();
-	//pp->setNetInfo(graph->getNetInfo());
-    //pp->infProbCal();
-    
-    
-    //delete pp;
+    graphindexer->prints();
+	
     delete graphindexer;
 	delete graph;	
 	/*

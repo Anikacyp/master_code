@@ -25,7 +25,7 @@ struct Node
         if(node_ID==other.node_ID)
             return net_ID<other.net_ID;
         else
-            return node_ID<n1.node_ID;
+            return node_ID<other.node_ID;
     }
     bool operator==(const Node& other)const{
         return node_ID==other.node_ID && net_ID==other.net_ID;
