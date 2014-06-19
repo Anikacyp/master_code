@@ -98,7 +98,7 @@ void GraphIndexer::adjTable()
     }
     
     //print information:
-    /*std::vector<AdjNode>::iterator iter1=adjnodes.begin();
+    std::vector<AdjNode>::iterator iter1=adjnodes.begin();
     while (iter1!=adjnodes.end()) {
         AdjNode tmp=*iter1;
         
@@ -112,7 +112,7 @@ void GraphIndexer::adjTable()
         std::cout<<std::endl;
         iter1++;
     }
-    std::cout<<"-----------------------------------"<<std::endl;*/
+    std::cout<<"-----------------------------------"<<std::endl;
 }
 
 void GraphIndexer::infCal()
@@ -173,6 +173,7 @@ int GraphIndexer::Dijkstra(Node source, Node tmp,int num)
         std::vector<EdgeNode>::iterator iter=tadj.edgenodes.begin();
        
         while (iter!=tadj.edgenodes.end()) {
+            if(iter->dest.net_ID==source.net_ID){
             if(dijkmap.count(iter->dest))
             {
                 if (dijkmap[iter->dest]<(dijkmap[tmp]*(iter->weight)))
@@ -186,12 +187,16 @@ int GraphIndexer::Dijkstra(Node source, Node tmp,int num)
                 }
             }else
             {
-                dijkmap[iter->dest]=dijkmap[tmp]*iter->weight;
-                //record the path
-                std::vector<EdgeNode> tedges=tmpp[tmp];
-                EdgeNode tedge(iter->dest,iter->weight);
-                tedges.push_back(tedge);
-                tmpp[iter->dest]=tedges;
+                if (dijkmap[tmp]*iter->weight!=0)
+                {
+                    dijkmap[iter->dest]=dijkmap[tmp]*iter->weight;
+                    //record the path
+                    std::vector<EdgeNode> tedges=tmpp[tmp];
+                    EdgeNode tedge(iter->dest,iter->weight);
+                    tedges.push_back(tedge);
+                    tmpp[iter->dest]=tedges;
+                }
+            }
             }
             iter++;
         }
@@ -246,13 +251,3 @@ void GraphIndexer::prints()
         iter1++;
     }
 }
-
-
-
-
-
-
-
-
-
-

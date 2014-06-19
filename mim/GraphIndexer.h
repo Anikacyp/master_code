@@ -31,16 +31,6 @@ typedef struct AdjNode
     AdjNode(){}
 }AdjNode;
 
-/*struct MPP
-{
-    //Node source;
-    Node dest;
-    //double max_weight;
-    std::vector<EdgeNode> path;
-    MPP(){}
-};*/
-
-
 class GraphIndexer
 {
     
