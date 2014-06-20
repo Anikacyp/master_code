@@ -62,9 +62,10 @@ struct NetPair
 };
 
 
+
 struct NodeInfPair
 {
-    NODE dest;
+    int node;
     double pp;
     std::vector<std::vector<NODE> > paths;
 };

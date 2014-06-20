@@ -78,6 +78,7 @@ void Graph::graphBuilding()
                 tnode.insert(nu);
                 tnode.insert(nv);
                 nodenet[nu].insert(i+1);
+                nodenet[nv].insert(i+1);
                 
                 EDGE edge;
                 if(w1>0)
@@ -152,7 +153,18 @@ void Graph::adjacentTable(NODE n1, NODE n2, double w)
     adjTable[n1].push_back(adje);
 }
 
-
+std::map<NODE, std::vector<ADJEDGE> > Graph::getAdjTable()
+{
+    return adjTable;
+}
+std::set<int> Graph::getNodes()
+{
+    return nodes;
+}
+std::map<int, std::set<int> > Graph::getNodeNet()
+{
+    return nodenet;
+}
 
 
 void Graph::print()

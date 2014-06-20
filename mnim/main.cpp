@@ -6,13 +6,11 @@
 //
 //
 #include <iostream>
-#include "Graph.h"
+#include "HBI.h"
 int main(int agrc, char * argv[])
 {
-    Graph * graph=new Graph();
-    graph->fileInput();
-    graph->graphBuilding();
-    graph->print();
-    delete graph;
+    HBI *hbi=new HBI();
+    hbi->traversal();
+    delete hbi;
     return 1;
 }

@@ -12,20 +12,34 @@
 
 #ifndef __mnim__HBI__
 #define __mnim__HBI__
-#include "Graph.h"
 #include <iostream>
 #include <map>
-
+#include "Graph.h"
+#include "limit.h"
 class HBI
 {
 private:
-    std::map<NODE,int> NodeStatus;
+    //tmp variables
+    //nodeStatus store the nodes status.
+    std::map<NODE,int> nodeStatus;
+    //CAN store the current active nodes;
+    std::set<NODE> Can;
+    //tmpinf store current influence value from source node to the current actived nodes along the active path
+    std::map<NODE,double> tmpinf;
+    
+    // graph variables
+    std::map<NODE, std::vector<ADJEDGE> > adjTable;
+    std::set<int> nodes;
+    std::map<int, std::set<int> > nodenet;
+    
     
 public:
     HBI();
     ~HBI();
-    void asyncleCal(NODE node);
-    void syncCal(int node);
+    void asynCal(NODE node);
+    void synCal(int node);
+    void spread(std::set<NODE> cnode);
+    void traversal();
     
 };
 

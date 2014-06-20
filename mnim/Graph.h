@@ -26,19 +26,19 @@ private:
     //edges stores the edges of the overall networks
     static std::vector<EDGE> edges;
     
-    //adjTable stores the adjacent table of a given node.
+    //adjTable stores the adjacent table of a given node.!!!
     static std::map<NODE, std::vector<ADJEDGE> > adjTable;
     
     //netifmap stores the influence value between networks
     static std::map<NetPair, double> netifmap;
     
-    //nodes stores the total nodes of the overall networks
+    //nodes stores the total nodes of the overall networks!!!
     static std::set<int> nodes;
     
     //netnodes stores the nodes of a network.
     static std::map<int, std::set<int> > netnodes;
     
-    //nodenet stores the node was contained in which networks.
+    //nodenet stores the node was contained in which networks.!!!
     static std::map<int, std::set<int> > nodenet;
 
 
@@ -50,6 +50,9 @@ public:
     void netinfGraph();
     void adjacentTable(NODE n1,NODE n2, double w);
     void print();
+    std::map<NODE, std::vector<ADJEDGE> > getAdjTable();
+    std::set<int> getNodes();
+    std::map<int, std::set<int> > getNodeNet();
 };
 
 
