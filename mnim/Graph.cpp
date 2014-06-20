@@ -113,9 +113,6 @@ void Graph::netinfGraph()
                 np.net1=i;
                 np.net2=j;
                 double w1=netifmap[np];
-                np.net1=j;
-                np.net2=i;
-                double w2=netifmap[np];
                 
                 
                 std::set<int> nodenet1=netnodes[i];
@@ -137,14 +134,6 @@ void Graph::netinfGraph()
                             edge.weight=w1;
                             edges.push_back(edge);
                             adjacentTable(n1,n2,w1);
-                        }
-                        if(w2>0)
-                        {
-                            edge.u=n2;
-                            edge.v=n1;
-                            edge.weight=w2;
-                            edges.push_back(edge);
-                            adjacentTable(n2,n1,w2);
                         }
                     }
                     iter++;

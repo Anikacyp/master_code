@@ -11,8 +11,8 @@
 		84C6D81D195323A8000EEF1C /* Graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
 		84C6D81E195323D2000EEF1C /* FileIO.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileIO.cpp; sourceTree = "<group>"; };
 		84C6D81F195323D2000EEF1C /* FileIO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileIO.h; sourceTree = "<group>"; };
-		84C6D820195323DE000EEF1C /* HopBasedInf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HopBasedInf.cpp; sourceTree = "<group>"; };
-		84C6D821195323DE000EEF1C /* HopBasedInf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HopBasedInf.h; sourceTree = "<group>"; };
+		84C6D820195323DE000EEF1C /* HBI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HBI.cpp; sourceTree = "<group>"; };
+		84C6D821195323DE000EEF1C /* HBI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBI.h; sourceTree = "<group>"; };
 		84C6D822195323F6000EEF1C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		84C6D82419532A57000EEF1C /* BaseObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseObj.h; sourceTree = "<group>"; };
 		84C6D82519532D96000EEF1C /* makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
@@ -28,8 +28,8 @@
 				84C6D82519532D96000EEF1C /* makefile */,
 				84C6D81E195323D2000EEF1C /* FileIO.cpp */,
 				84C6D81F195323D2000EEF1C /* FileIO.h */,
-				84C6D820195323DE000EEF1C /* HopBasedInf.cpp */,
-				84C6D821195323DE000EEF1C /* HopBasedInf.h */,
+				84C6D820195323DE000EEF1C /* HBI.cpp */,
+				84C6D821195323DE000EEF1C /* HBI.h */,
 				84C6D81C195323A8000EEF1C /* Graph.cpp */,
 				84C6D81D195323A8000EEF1C /* Graph.h */,
 				84C6D8261953AC2A000EEF1C /* n1.txt */,
