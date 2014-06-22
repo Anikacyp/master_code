@@ -16,6 +16,11 @@
 #include <map>
 #include "Graph.h"
 #include "limit.h"
+struct infPath
+{
+    std::vector<NODE> pathes;
+    double pp;
+};
 class HBI
 {
 private:
@@ -26,6 +31,14 @@ private:
     std::set<NODE> Can;
     //tmpinf store current influence value from source node to the current actived nodes along the active path
     std::map<NODE,double> tmpinf;
+    std::map<int,double> tmpGinf;
+    std::map<NODE, std::vector<infPath> > tmppath;
+    std::vector<NODE> subpath;
+    std::vector<infPath> tmpinfpath;
+    
+    //global variable
+    std::map<int,std::map<int,double> > GlobalInf;
+    std::map<int,std::map<int,std::vector<infPath> > > infPathes;
     
     // graph variables
     std::map<NODE, std::vector<ADJEDGE> > adjTable;
@@ -36,9 +49,9 @@ private:
 public:
     HBI();
     ~HBI();
-    void asynCal(NODE node);
-    void synCal(int node);
-    void spread(std::set<NODE> cnode);
+    void asynICM(NODE node);
+    void synICM(int node);
+    void spreadICM(std::set<NODE> cnode);
     void traversal();
     
 };
