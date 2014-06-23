@@ -14,6 +14,8 @@
 #define __mnim__HBI__
 #include <iostream>
 #include <map>
+#include <cstdlib>
+#include <ctime>
 #include "Graph.h"
 #include "limit.h"
 struct infPath
@@ -43,6 +45,7 @@ private:
     // graph variables
     std::map<NODE, std::vector<ADJEDGE> > adjTable;
     std::set<int> nodes;
+    std::map<int,double> naive;
     std::map<int, std::set<int> > nodenet;
     
     
@@ -53,6 +56,7 @@ public:
     void synICM(int node);
     void spreadICM(std::set<NODE> cnode);
     void traversal();
+    void randominf();
     
 };
 

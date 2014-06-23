@@ -15,7 +15,9 @@ std::set<int> Graph::nodes;
 std::map<int,std::set<int> > Graph::netnodes;
 std::map<int,std::set<int> > Graph::nodenet;
 
-Graph::Graph(){}
+Graph::Graph(){
+    //nodes.clear();
+}
 Graph::~Graph(){}
 
 void Graph::fileInput()
@@ -67,6 +69,7 @@ void Graph::graphBuilding()
             while(!ifile.eof())
             {
                 ifile>>nu>>nv>>w1>>w2;
+                std::cout<<nu<<"\t"<<nv<<"\t"<<w1<<"\t"<<w2<<std::endl;
                 u.node_id=nu;
                 u.net_id=i+1;
                 v.node_id=nv;
