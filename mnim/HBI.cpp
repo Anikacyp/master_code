@@ -4,7 +4,6 @@
 //
 //  Created by Anika on 6/20/14.
 //
-//
 
 #include "HBI.h"
 
@@ -37,28 +36,15 @@ void HBI::traversal()
         
         //path record
         tmppath.clear();
-        subpath.clear();
-        tmpinfpath.clear();
         
         synICM(*iter);
         
         GlobalInf[*iter]=tmpGinf;
+        GIP[*iter]=tmppath;
         
-        //
-        std::cout<<"result--------------------------------------"<<std::endl;
-        std::map<int,std::map<int,double> >::iterator iter=GlobalInf.begin();
-        while (iter!=GlobalInf.end()) {
-            std::map<int,double>::iterator titer=iter->second.begin();
-            while (titer!=iter->second.end()) {
-                std::cout<<iter->first<<"\t"<<titer->first<<"\t"<<1-titer->second<<std::endl;
-                titer++;
-            }
-            iter++;
-        }
-        //
-        return;
         iter++;
     }
+    print();
 }
 
 void HBI::synICM(int node)
@@ -68,20 +54,18 @@ void HBI::synICM(int node)
     //std::map<NODE,double> tmpinf;
     std::set<int> tnet=nodenet[node];
     std::set<int>::iterator iter=tnet.begin();
-    //std::cout<<"current node "<<node<<" and its subnodes: "<<std::endl;
     while (iter!=tnet.end()) {
-        
         NODE tn(node,*iter);
-        //std::cout<<tn.node_id<<"_"<<tn.net_id<<std::endl;
+
         Can.insert(tn);
         tmpinf[tn]=1;
         nodeStatus[tn]=1;
         tmpGinf[node]=0;
-        //record the influence propagation path
-        //subpath.push_bach(tn);
-        //tmpinfpath.pp=1;
-        //tmpinfpath.pathes=
         
+        //record the influence propagation path
+        //--------------------------------------
+        pathRecord(tn,tn,1.0);
+        //--------------------------------------
         iter++;
     }
     //initialize
@@ -104,7 +88,7 @@ void HBI::spreadICM(std::set<NODE> can)
                 if (tval>=THETA) {
                     if (!nodeStatus.count(tadj[i].dest))
                     {
-                        std::cout<<iter->node_id<<"_"<<iter->net_id<<"\t"<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<"\t"<<tval<<std::endl;
+                        //std::cout<<iter->node_id<<"_"<<iter->net_id<<"\t"<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<"\t"<<tval<<std::endl;
                         if (tmpGinf.count(tadj[i].dest.node_id))
                         {
                             if ((*iter).node_id==tadj[i].dest.node_id)
@@ -113,6 +97,7 @@ void HBI::spreadICM(std::set<NODE> can)
                                 tCan.insert(tadj[i].dest);
                                 nodeStatus[tadj[i].dest]=1;
                                 tmpGinf[tadj[i].dest.node_id]*=(1-tval);
+                                pathRecord(*iter,tadj[i].dest,tadj[i].weight);
                                 //std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf包含"<<tadj[i].dest.node_id<<"\t自身传播\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
                             }else
                             {
@@ -123,6 +108,7 @@ void HBI::spreadICM(std::set<NODE> can)
                                     tCan.insert(tadj[i].dest);
                                     nodeStatus[tadj[i].dest]=1;
                                     tmpGinf[tadj[i].dest.node_id]*=(1-tval);
+                                    pathRecord(*iter,tadj[i].dest,tadj[i].weight*naive[tadj[i].dest.node_id]);
                                     //std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf包含"<<tadj[i].dest.node_id<<"\t非自身传播\t"<<tval<<"\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
                                 }
                             }
@@ -132,6 +118,7 @@ void HBI::spreadICM(std::set<NODE> can)
                             tCan.insert(tadj[i].dest);
                             nodeStatus[tadj[i].dest]=1;
                             tmpGinf[tadj[i].dest.node_id]=(1-tval);
+                            pathRecord(*iter,tadj[i].dest,tadj[i].weight);
                             //std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf不包含"<<tadj[i].dest.node_id<<"\t非自身传播\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
                         }
                     }
@@ -177,11 +164,6 @@ void HBI::spreadICM(std::set<NODE> can)
 }
 
 
-void HBI::asynICM(NODE node)
-{
-    
-}
-
 void HBI::randominf()
 {
     std::srand(unsigned(time(0)));
@@ -194,3 +176,71 @@ void HBI::randominf()
         iter++;
     }
 }
+
+void HBI::pathRecord(NODE parent, NODE child, double w)
+{
+    std::vector<ADJEDGE> path;
+    infPath ip;
+    ADJEDGE adje;
+    adje.dest=child;
+    adje.weight=w;
+    if (!tmppath.count(parent)) {
+        if (parent==child) {
+            path.clear();
+            path.push_back(adje);
+            
+            ip.path=path;
+            ip.pp=w;
+            
+            tmppath[child]=ip;
+        }
+    }else
+    {
+        ip=tmppath[parent];
+        ip.path.push_back(adje);
+        ip.pp*=w;
+        tmppath[child]=ip;
+    }
+}
+
+void HBI::print()
+{
+    //
+    std::cout<<"result-----------------pp---------------------"<<std::endl;
+    std::map<int,std::map<int,double> >::iterator iter=GlobalInf.begin();
+    while (iter!=GlobalInf.end()) {
+        std::map<int,double>::iterator titer=iter->second.begin();
+        while (titer!=iter->second.end()) {
+            std::cout<<iter->first<<"\t"<<titer->first<<"\t"<<1-titer->second<<std::endl;
+            titer++;
+        }
+        iter++;
+    }
+    //
+    std::cout<<"result-----------------path---------------------"<<std::endl;
+    std::map<int,std::map<NODE,infPath> >::iterator iter2=GIP.begin();
+    while (iter2!=GIP.end()) {
+        std::cout<<"current propagation path of node "<<iter2->first<<std::endl;
+        std::map<NODE,infPath>::iterator piter=iter2->second.begin();
+        while (piter!=iter2->second.end()) {
+            std::cout<<piter->first.node_id<<"_"<<piter->first.net_id<<":\t";
+            std::vector<ADJEDGE> adjs=piter->second.path;
+            std::vector<ADJEDGE>::iterator aiter=adjs.begin();
+            while (aiter!=adjs.end()) {
+                std::cout<<aiter->dest.node_id<<"_"<<aiter->dest.net_id<<"("<<aiter->weight<<")\t";
+                aiter++;
+            }
+            std::cout<<"\tPP:\t"<<piter->second.pp<<std::endl;
+            piter++;
+        }
+        std::cout<<std::endl;
+        iter2++;
+    }
+    
+}
+
+void HBI::asynICM(NODE node)
+{
+    
+}
+

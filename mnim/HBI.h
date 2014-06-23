@@ -20,9 +20,10 @@
 #include "limit.h"
 struct infPath
 {
-    std::vector<NODE> pathes;
+    std::vector<ADJEDGE> path;
     double pp;
 };
+
 class HBI
 {
 private:
@@ -34,13 +35,13 @@ private:
     //tmpinf store current influence value from source node to the current actived nodes along the active path
     std::map<NODE,double> tmpinf;
     std::map<int,double> tmpGinf;
-    std::map<NODE, std::vector<infPath> > tmppath;
-    std::vector<NODE> subpath;
-    std::vector<infPath> tmpinfpath;
+    
+    //tmp propagation path variable
+    std::map<NODE, infPath> tmppath;
     
     //global variable
     std::map<int,std::map<int,double> > GlobalInf;
-    std::map<int,std::map<int,std::vector<infPath> > > infPathes;
+    std::map<int,std::map<NODE,infPath> > GIP;
     
     // graph variables
     std::map<NODE, std::vector<ADJEDGE> > adjTable;
@@ -57,6 +58,8 @@ public:
     void spreadICM(std::set<NODE> cnode);
     void traversal();
     void randominf();
+    void pathRecord(NODE parent,NODE child,double w);
+    void print();
     
 };
 

@@ -69,7 +69,7 @@ void Graph::graphBuilding()
             while(!ifile.eof())
             {
                 ifile>>nu>>nv>>w1>>w2;
-                std::cout<<nu<<"\t"<<nv<<"\t"<<w1<<"\t"<<w2<<std::endl;
+                //std::cout<<nu<<"\t"<<nv<<"\t"<<w1<<"\t"<<w2<<std::endl;
                 u.node_id=nu;
                 u.net_id=i+1;
                 v.node_id=nv;
