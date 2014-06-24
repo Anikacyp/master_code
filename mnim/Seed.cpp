@@ -7,3 +7,11 @@
 //
 
 #include "Seed.h"
+
+Seed::Seed(){}
+Seed::~Seed(){}
+
+void Seed::topkSeed()
+{
+    
+}

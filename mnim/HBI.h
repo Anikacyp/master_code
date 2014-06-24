@@ -39,27 +39,31 @@ private:
     //tmp propagation path variable
     std::map<NODE, infPath> tmppath;
     
-    //global variable
+    //variable for synchronous propagation process
     std::map<int,std::map<int,double> > GlobalInf;
     std::map<int,std::map<NODE,infPath> > GIP;
+    
+    //variables for asynchronous propagation process
+    std::map<NODE,std::map<int,double> > GlobalAsynInf;
+    std::map<NODE,std::map<NODE,infPath> > GIPAsyn;
+    
     
     // graph variables
     std::map<NODE, std::vector<ADJEDGE> > adjTable;
     std::set<int> nodes;
     std::map<int,double> naive;
     std::map<int, std::set<int> > nodenet;
-    
-    
+
 public:
     HBI();
     ~HBI();
-    void asynICM(NODE node);
+    void asynICM(int node);
     void synICM(int node);
     void spreadICM(std::set<NODE> cnode);
-    void traversal();
+    void traversal(int flag);
     void randominf();
     void pathRecord(NODE parent,NODE child,double w);
-    void print();
+    void print(int flag);
     
 };
 

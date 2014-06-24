@@ -11,4 +11,19 @@
 
 #include <iostream>
 
+
+class Seed
+{
+private:
+    std::map<int,std::map<int,double> > GlobalInf;
+    std::map<int,std::map<NODE,infPath> > GIP;
+    std::map<int,double> naive;
+    
+public:
+    Seed();
+    ~Seed();
+    void topkSeed();
+    
+};
+
 #endif /* defined(__mnim__Seed__) */

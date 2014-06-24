@@ -14,7 +14,7 @@
 		84C6D82519532D96000EEF1C /* makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
 		84C6D8261953AC2A000EEF1C /* n1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = n1.txt; sourceTree = "<group>"; };
 		84C6D8271953AC2A000EEF1C /* n2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = n2.txt; sourceTree = "<group>"; };
-		84C6D8281953C2A7000EEF1C /* HBI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HBI.cpp; sourceTree = "<group>"; };
+		84C6D8281953C2A7000EEF1C /* HBI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HBI.cpp; sourceTree = "<group>"; };
 		84C6D8291953C2A7000EEF1C /* HBI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBI.h; sourceTree = "<group>"; };
 		84C6D82A1953CDB7000EEF1C /* limit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = limit.h; sourceTree = "<group>"; };
 		84C6D82B1957D310000EEF1C /* d1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = d1.txt; sourceTree = "<group>"; };

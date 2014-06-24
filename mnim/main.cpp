@@ -10,7 +10,7 @@
 int main(int agrc, char * argv[])
 {
     HBI *hbi=new HBI();
-    hbi->traversal();
+    hbi->traversal(2);
     delete hbi;
     return 1;
 }

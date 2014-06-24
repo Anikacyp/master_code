@@ -24,29 +24,35 @@ HBI::HBI()
 HBI::~HBI(){}
 
 
-void HBI::traversal()
+void HBI::traversal(int flag)
 {
     std::set<int>::iterator iter=nodes.begin();
     while (iter!=nodes.end()) {
-        //intialize the variable as null
-        nodeStatus.clear();
-        Can.clear();
-        tmpinf.clear();
-        tmpGinf.clear();
-        
-        //path record
-        tmppath.clear();
-        
-        synICM(*iter);
-        
-        GlobalInf[*iter]=tmpGinf;
-        GIP[*iter]=tmppath;
-        
+        if (flag==1) {
+            //intialize the variable as empty
+            nodeStatus.clear();
+            Can.clear();
+            tmpinf.clear();
+            tmpGinf.clear();
+            //path record
+            tmppath.clear();
+            
+            synICM(*iter);
+            GlobalInf[*iter]=tmpGinf;
+            GIP[*iter]=tmppath;
+        }else
+        {
+            asynICM(*iter);
+        }
         iter++;
     }
-    print();
+    if (flag==1)
+        print(1);
+    else
+        print(2);
 }
 
+//syncICM treat the nodes which has the same node_id were activated at the same time.
 void HBI::synICM(int node)
 {
     tmpGinf[node]=1;
@@ -68,8 +74,38 @@ void HBI::synICM(int node)
         //--------------------------------------
         iter++;
     }
-    //initialize
+    //propagation simulate
     spreadICM(Can);
+}
+
+//asynICM treats the nodes which has the same node_id were randomly activated
+void HBI::asynICM(int node)
+{
+    std::set<int> tnet=nodenet[node];
+    std::set<int>::iterator iter=tnet.begin();
+    while (iter!=tnet.end()) {
+        NODE tn(node,*iter);
+        
+        //initialize:
+        nodeStatus.clear();
+        Can.clear();
+        tmpinf.clear();
+        tmpGinf.clear();
+        tmppath.clear();
+        
+        Can.insert(tn);
+        tmpinf[tn]=1;
+        tmpGinf[node]=0;
+        pathRecord(tn,tn,1.0);
+        
+        spreadICM(Can);
+        
+        GlobalAsynInf[tn]=tmpGinf;
+        GIPAsyn[tn]=tmppath;
+        
+        iter++;
+    }
+    
 }
 
 void HBI::spreadICM(std::set<NODE> can)
@@ -86,6 +122,7 @@ void HBI::spreadICM(std::set<NODE> can)
                 double tval=tmpinf[*iter]*(tadj[i].weight);
                 
                 if (tval>=THETA) {
+                    
                     if (!nodeStatus.count(tadj[i].dest))
                     {
                         //std::cout<<iter->node_id<<"_"<<iter->net_id<<"\t"<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<"\t"<<tval<<std::endl;
@@ -163,7 +200,6 @@ void HBI::spreadICM(std::set<NODE> can)
         return;
 }
 
-
 void HBI::randominf()
 {
     std::srand(unsigned(time(0)));
@@ -171,7 +207,7 @@ void HBI::randominf()
     std::set<int>::iterator iter=nodes.begin();
     while (iter!=nodes.end()) {
         tval=std::rand()/(double)(RAND_MAX);
-        naive[*iter]=tval;
+        naive[*iter]=tval/10.0;
         std::cout<<*iter<<"\t"<<tval<<std::endl;
         iter++;
     }
@@ -203,44 +239,75 @@ void HBI::pathRecord(NODE parent, NODE child, double w)
     }
 }
 
-void HBI::print()
+void HBI::print(int flag)
 {
     //
-    std::cout<<"result-----------------pp---------------------"<<std::endl;
-    std::map<int,std::map<int,double> >::iterator iter=GlobalInf.begin();
-    while (iter!=GlobalInf.end()) {
-        std::map<int,double>::iterator titer=iter->second.begin();
-        while (titer!=iter->second.end()) {
-            std::cout<<iter->first<<"\t"<<titer->first<<"\t"<<1-titer->second<<std::endl;
-            titer++;
-        }
-        iter++;
-    }
-    //
-    std::cout<<"result-----------------path---------------------"<<std::endl;
-    std::map<int,std::map<NODE,infPath> >::iterator iter2=GIP.begin();
-    while (iter2!=GIP.end()) {
-        std::cout<<"current propagation path of node "<<iter2->first<<std::endl;
-        std::map<NODE,infPath>::iterator piter=iter2->second.begin();
-        while (piter!=iter2->second.end()) {
-            std::cout<<piter->first.node_id<<"_"<<piter->first.net_id<<":\t";
-            std::vector<ADJEDGE> adjs=piter->second.path;
-            std::vector<ADJEDGE>::iterator aiter=adjs.begin();
-            while (aiter!=adjs.end()) {
-                std::cout<<aiter->dest.node_id<<"_"<<aiter->dest.net_id<<"("<<aiter->weight<<")\t";
-                aiter++;
+    if (flag==1) {
+        std::cout<<"result-----------------pp---------------------"<<std::endl;
+        std::map<int,std::map<int,double> >::iterator iter=GlobalInf.begin();
+        while (iter!=GlobalInf.end()) {
+            std::map<int,double>::iterator titer=iter->second.begin();
+            while (titer!=iter->second.end()) {
+                std::cout<<iter->first<<"\t"<<titer->first<<"\t"<<1-titer->second<<std::endl;
+                titer++;
             }
-            std::cout<<"\tPP:\t"<<piter->second.pp<<std::endl;
-            piter++;
+            std::cout<<"------------------------"<<std::endl;
+            iter++;
         }
-        std::cout<<std::endl;
-        iter2++;
+    //
+        std::cout<<"result-----------------path---------------------"<<std::endl;
+        std::map<int,std::map<NODE,infPath> >::iterator iter2=GIP.begin();
+        while (iter2!=GIP.end()) {
+            std::cout<<"current propagation path of node "<<iter2->first<<std::endl;
+            std::map<NODE,infPath>::iterator piter=iter2->second.begin();
+            while (piter!=iter2->second.end()) {
+                std::cout<<piter->first.node_id<<"_"<<piter->first.net_id<<":\t";
+                std::vector<ADJEDGE> adjs=piter->second.path;
+                std::vector<ADJEDGE>::iterator aiter=adjs.begin();
+                while (aiter!=adjs.end()) {
+                    std::cout<<aiter->dest.node_id<<"_"<<aiter->dest.net_id<<"("<<aiter->weight<<")\t";
+                    aiter++;
+                }
+                std::cout<<"\tPP:\t"<<piter->second.pp<<std::endl;
+                piter++;
+            }
+            std::cout<<std::endl;
+            iter2++;
+        }
+    }else
+    {
+        std::cout<<"result-----------------pp---------------------"<<std::endl;
+        std::map<NODE,std::map<int,double> >::iterator iter=GlobalAsynInf.begin();
+        while (iter!=GlobalAsynInf.end()) {
+            std::map<int,double>::iterator titer=iter->second.begin();
+            while (titer!=iter->second.end()) {
+                std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<titer->first<<"\t"<<1-titer->second<<std::endl;
+                titer++;
+            }
+            std::cout<<"------------------------"<<std::endl;
+            iter++;
+        }
+        //
+        std::cout<<"result-----------------path---------------------"<<std::endl;
+        std::map<NODE,std::map<NODE,infPath> >::iterator iter2=GIPAsyn.begin();
+        while (iter2!=GIPAsyn.end()) {
+            std::cout<<"current propagation path of node "<<iter2->first.node_id<<"_"<<iter2->first.net_id<<std::endl;
+            std::map<NODE,infPath>::iterator piter=iter2->second.begin();
+            while (piter!=iter2->second.end()) {
+                std::cout<<piter->first.node_id<<"_"<<piter->first.net_id<<":\t";
+                std::vector<ADJEDGE> adjs=piter->second.path;
+                std::vector<ADJEDGE>::iterator aiter=adjs.begin();
+                while (aiter!=adjs.end()) {
+                    std::cout<<aiter->dest.node_id<<"_"<<aiter->dest.net_id<<"("<<aiter->weight<<")\t";
+                    aiter++;
+                }
+                std::cout<<"\tPP:\t"<<piter->second.pp<<std::endl;
+                piter++;
+            }
+            std::cout<<std::endl;
+            iter2++;
+        }
     }
-    
 }
 
-void HBI::asynICM(NODE node)
-{
-    
-}
 
