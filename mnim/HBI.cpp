@@ -207,8 +207,9 @@ void HBI::randominf()
     std::set<int>::iterator iter=nodes.begin();
     while (iter!=nodes.end()) {
         tval=std::rand()/(double)(RAND_MAX);
-        naive[*iter]=tval/10.0;
-        std::cout<<*iter<<"\t"<<tval<<std::endl;
+        //tval=1;
+        naive[*iter]=tval;
+        //std::cout<<*iter<<"\t"<<tval<<std::endl;
         iter++;
     }
 }
@@ -242,16 +243,20 @@ void HBI::pathRecord(NODE parent, NODE child, double w)
 void HBI::print(int flag)
 {
     //
+    double value=0.0;
     if (flag==1) {
         std::cout<<"result-----------------pp---------------------"<<std::endl;
         std::map<int,std::map<int,double> >::iterator iter=GlobalInf.begin();
         while (iter!=GlobalInf.end()) {
+            value=0.0;
             std::map<int,double>::iterator titer=iter->second.begin();
             while (titer!=iter->second.end()) {
+                value+=(1-titer->second);
                 std::cout<<iter->first<<"\t"<<titer->first<<"\t"<<1-titer->second<<std::endl;
                 titer++;
             }
-            std::cout<<"------------------------"<<std::endl;
+            std::cout<<"    ("<<iter->first<<"\t"<<value<<")     \n\n"<<std::endl;
+            //std::cout<<"------------------------"<<std::endl;
             iter++;
         }
     //
@@ -279,12 +284,15 @@ void HBI::print(int flag)
         std::cout<<"result-----------------pp---------------------"<<std::endl;
         std::map<NODE,std::map<int,double> >::iterator iter=GlobalAsynInf.begin();
         while (iter!=GlobalAsynInf.end()) {
+            value=0.0;
             std::map<int,double>::iterator titer=iter->second.begin();
             while (titer!=iter->second.end()) {
+                value+=(1-titer->second);
                 std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<titer->first<<"\t"<<1-titer->second<<std::endl;
                 titer++;
             }
-            std::cout<<"------------------------"<<std::endl;
+            std::cout<<"     ("<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<value<<")     \n\n"<<std::endl;
+            //std::cout<<"------------------------"<<std::endl;
             iter++;
         }
         //
@@ -311,3 +319,137 @@ void HBI::print(int flag)
 }
 
 
+void HBI::MPPinf()
+{
+    std::set<int>::iterator iter=nodes.begin();
+    while (iter!=nodes.end()) {
+        if(nodenet.count(*iter))
+        {
+            std::set<int>::iterator iter1=nodenet[*iter].begin();
+            while (iter1!=nodenet[*iter].end()) {
+                
+                tmpp.clear();
+                tmval.clear();
+                cans.clear();
+                cain.clear();
+                
+                NODE node(*iter,*iter1);
+                current_node=node;
+                
+                if (!mpp.count(node)) {
+                    
+                    //record the influence path;
+                    ADJEDGE tadj;
+                    tadj.dest=node;
+                    tadj.weight=1;
+                    tmpp[node].push_back(tadj);
+                    tmval[node]=1;
+                    cain.insert(node.node_id);
+                }
+                Dijkstra(node);
+                infval[node]=tmval;
+                mpp[node]=tmpp;
+                iter1++;
+            }
+        }
+        iter++;
+    }
+    printMpp();
+}
+
+void HBI::Dijkstra(NODE source)
+{
+    cans.insert(source);
+    std::vector<ADJEDGE> tmpadjs=adjTable[source];
+    
+    double tp=tmval[source];
+    
+    NODE next;
+    double tval=0.0;
+    double tvalue=0.0;
+    bool flag=false;
+    
+    
+    for (int i=0; i<tmpadjs.size(); i++)
+    {
+        ADJEDGE tedge=tmpadjs[i];
+        if (!cans.count(tedge.dest))
+        {
+            
+            tvalue=tp*tedge.weight;
+            
+            if (tvalue>THETA)
+            {
+                if (!tmpp.count(tedge.dest))
+                {
+                    //std::cout<<"---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
+                    if(!cain.count(tedge.dest.node_id))
+                    {
+                        tmpp[tedge.dest]=tmpp[source];
+                        tmpp[tedge.dest].push_back(tedge);
+                        tmval[tedge.dest]=tvalue;
+                        cain.insert(tedge.dest.node_id);
+                    }else
+                    {
+                        if (source.node_id!=tedge.dest.node_id) {
+                            tvalue*=naive[tedge.dest.node_id];
+                        }
+                        if (tvalue>THETA) {
+                            tmpp[tedge.dest]=tmpp[source];
+                            tmpp[tedge.dest].push_back(tedge);
+                            tmval[tedge.dest]=tvalue;
+                        }
+                    }
+                    
+                }else
+                {
+                    if (source.node_id!=tedge.dest.node_id) {
+                        tvalue*=naive[tedge.dest.node_id];
+                    }
+                    if((tvalue>THETA)&&(tvalue>tmval[tedge.dest]))
+                    {
+                        //std::cout<<"---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
+                        tmpp[tedge.dest]=tmpp[source];
+                        tmpp[tedge.dest].push_back(tedge);
+                        tmval[tedge.dest]=tvalue;
+                    }
+                }
+            }
+        }
+    }
+    
+    std::map<NODE,double>::iterator iter=tmval.begin();
+    while (iter!=tmval.end()) {
+        if (!cans.count(iter->first)) {
+            if (tval<iter->second) {
+                tval=iter->second;
+                next=iter->first;
+                flag=true;
+            }
+        }
+        iter++;
+    }
+    if (flag) {
+        //std::cout<<"next middle node: "<<next.node_id<<"_"<<next.net_id<<std::endl;
+        Dijkstra(next);
+    }else
+        return;
+}
+
+void HBI::printMpp()
+{
+    std::map<NODE,std::map<NODE,double> >::iterator iter=infval.begin();
+    while (iter!=infval.end()) {
+        std::map<NODE,double>::iterator iter1=iter->second.begin();
+        while (iter1!=iter->second.end()) {
+            std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<iter1->first.node_id<<"_"<<iter1->first.net_id<<"\t"<<iter1->second<<std::endl;
+            std::vector<ADJEDGE> path=mpp[iter->first][iter1->first];
+            for (int i=0; i<path.size(); i++) {
+                std::cout<<path[i].dest.node_id<<"_"<<path[i].dest.net_id<<" ("<<path[i].weight<<")\t";
+            }
+            std::cout<<"\n"<<std::endl;
+            iter1++;
+        }
+        iter++;
+    }
+}

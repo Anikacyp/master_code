@@ -31,10 +31,13 @@ void Graph::fileInput()
         files.push_back(file);
     }
     
-    if (this->network_NO>1) {
-        for (int i=1; i<=network_NO; i++) {
+    if (this->network_NO>1)
+    {
+        for (int i=1; i<=network_NO; i++)
+        {
             int j=1;
-            while (j<=this->network_NO) {
+            while (j<=this->network_NO)
+            {
                 if(i!=j)
                 {
                     NetPair np(i,j);
@@ -45,6 +48,7 @@ void Graph::fileInput()
             }
         }
     }
+    std::cout<<"\n"<<std::endl;
 }
 
 

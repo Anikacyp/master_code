@@ -47,6 +47,14 @@ private:
     std::map<NODE,std::map<int,double> > GlobalAsynInf;
     std::map<NODE,std::map<NODE,infPath> > GIPAsyn;
     
+    //variables for maximum propagation path
+    std::map<NODE,std::map<NODE,std::vector<ADJEDGE> > > mpp;
+    std::map<NODE,std::vector<ADJEDGE> >tmpp;
+    std::map<NODE,std::map<NODE,double> > infval;
+    std::map<NODE,double> tmval;
+    std::set<NODE> cans;
+    NODE current_node;
+    std::set<int> cain;
     
     // graph variables
     std::map<NODE, std::vector<ADJEDGE> > adjTable;
@@ -64,6 +72,9 @@ public:
     void randominf();
     void pathRecord(NODE parent,NODE child,double w);
     void print(int flag);
+    void MPPinf();
+    void Dijkstra(NODE source);
+    void printMpp();
     
 };
 

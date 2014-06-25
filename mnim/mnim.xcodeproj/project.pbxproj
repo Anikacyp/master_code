@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		841DCC44195A5EA60063AFA1 /* PTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PTree.cpp; sourceTree = "<group>"; };
+		841DCC45195A5EA60063AFA1 /* PTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTree.h; sourceTree = "<group>"; };
 		84C6D81C195323A8000EEF1C /* Graph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Graph.cpp; sourceTree = "<group>"; };
 		84C6D81D195323A8000EEF1C /* Graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
 		84C6D822195323F6000EEF1C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -33,6 +35,8 @@
 				84C6D8291953C2A7000EEF1C /* HBI.h */,
 				84C6D82D1957DB32000EEF1C /* Seed.cpp */,
 				84C6D82E1957DB32000EEF1C /* Seed.h */,
+				841DCC44195A5EA60063AFA1 /* PTree.cpp */,
+				841DCC45195A5EA60063AFA1 /* PTree.h */,
 				84C6D81C195323A8000EEF1C /* Graph.cpp */,
 				84C6D81D195323A8000EEF1C /* Graph.h */,
 				84C6D822195323F6000EEF1C /* main.cpp */,
