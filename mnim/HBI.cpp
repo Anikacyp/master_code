@@ -159,34 +159,6 @@ void HBI::spreadICM(std::set<NODE> can)
                             //std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf不包含"<<tadj[i].dest.node_id<<"\t非自身传播\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
                         }
                     }
-                    /*if (!nodeStatus.count(tadj[i].dest))
-                    {
-                        std::cout<<iter->node_id<<"_"<<iter->net_id<<"\t"<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<"\t"<<tval<<std::endl;
-                        tmpinf[tadj[i].dest]=tval;
-                        tCan.insert(tadj[i].dest);
-                        
-                        //turn the node to active status.
-                        nodeStatus[tadj[i].dest]=1;
-                        
-                        if (!tmpGinf.count(tadj[i].dest.node_id))
-                        {
-                            tmpGinf[tadj[i].dest.node_id]=(1-tval);
-                            std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf也不包含"<<tadj[i].dest.node_id<<"\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
-                        }
-                        else
-                        {
-                            tmpGinf[tadj[i].dest.node_id]*=(1-tval);
-                            std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 但是tmpGinf包含"<<tadj[i].dest.node_id<<"\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
-                        }
-                    }*/
-                   /* else
-                    {
-                        if (nodeStatus[tadj[i].dest]==1)
-                        {
-                            tmpGinf[tadj[i].dest.node_id]*=(1-tval);
-                            std::cout<<"nodeStatus包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf也包含"<<tadj[i].dest.node_id<<"\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
-                        }
-                    }*/
                 }
             }
         }
