@@ -6,12 +6,12 @@
 //
 //
 #include <iostream>
-#include "HBI.h"
+#include "Model.h"
 int main(int agrc, char * argv[])
 {
-    HBI *hbi=new HBI();
-    hbi->MPPinf();
+    Model *model=new Model();
+    model->MPPinf();
     //hbi->traversal(2);
-    delete hbi;
+    delete model;
     return 1;
 }

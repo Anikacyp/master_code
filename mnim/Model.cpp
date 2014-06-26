@@ -1,13 +1,13 @@
 //
-//  Spread.cpp
+//  Model.cpp
 //  mnim
 //
 //  Created by Anika on 6/20/14.
 //
 
-#include "Spread.h"
+#include "Model.h"
 
-Spread::Spread()
+Model::Model()
 {
     nodes.clear();
     Graph * graph=new Graph();
@@ -20,9 +20,9 @@ Spread::Spread()
     delete graph;
 }
 
-Spread::~Spread(){}
+Model::~Model(){}
 
-void Spread::randominf()
+void Model::randominf()
 {
     std::srand(unsigned(time(0)));
     double tval=0.0;
@@ -37,7 +37,7 @@ void Spread::randominf()
 }
 
 
-void Spread::traversal(int flag)
+void Model::traversal(int flag)
 {
     std::set<int>::iterator iter=nodes.begin();
     while (iter!=nodes.end()) {
@@ -66,7 +66,7 @@ void Spread::traversal(int flag)
 }
 
 //syncICM treat the nodes which has the same node_id were activated at the same time.
-void Spread::synICM(int node)
+void Model::synICM(int node)
 {
     tmpGinf[node]=1;
     
@@ -86,11 +86,11 @@ void Spread::synICM(int node)
         iter++;
     }
     //propagation simulate
-    spreadICM(Can);
+    ModelICM(Can);
 }
 
 //asynICM treats the nodes which has the same node_id were randomly activated
-void Spread::asynICM(int node)
+void Model::asynICM(int node)
 {
     std::set<int> tnet=nodenet[node];
     std::set<int>::iterator iter=tnet.begin();
@@ -109,7 +109,7 @@ void Spread::asynICM(int node)
         tmpGinf[node]=0;
         pathRecord(tn,tn,1.0);
         
-        spreadICM(Can);
+        ModelICM(Can);
         
         GlobalAsynInf[tn]=tmpGinf;
         GIPAsyn[tn]=tmppath;
@@ -119,7 +119,7 @@ void Spread::asynICM(int node)
     
 }
 
-void Spread::spreadICM(std::set<NODE> can)
+void Model::ModelICM(std::set<NODE> can)
 {
     std::set<NODE> tCan;
     std::set<NODE>::iterator iter=can.begin();
@@ -178,12 +178,12 @@ void Spread::spreadICM(std::set<NODE> can)
         iter++;
     }
     if (tCan.size()>0) {
-        spreadICM(tCan);
+        ModelICM(tCan);
     }else
         return;
 }
 
-void Spread::MPPinf()
+void Model::MPPinf()
 {
     std::set<int>::iterator iter=nodes.begin();
     while (iter!=nodes.end()) {
@@ -221,7 +221,7 @@ void Spread::MPPinf()
     printMpp();
 }
 
-void Spread::Dijkstra(NODE source)
+void Model::Dijkstra(NODE source)
 {
     cans.insert(source);
     std::vector<ADJEDGE> tmpadjs=adjTable[source];
@@ -300,7 +300,7 @@ void Spread::Dijkstra(NODE source)
         return;
 }
 
-void Spread::pathRecord(NODE parent, NODE child, double w)
+void Model::pathRecord(NODE parent, NODE child, double w)
 {
     std::vector<ADJEDGE> path;
     infPath ip;
@@ -326,7 +326,7 @@ void Spread::pathRecord(NODE parent, NODE child, double w)
     }
 }
 
-void Spread::print(int flag)
+void Model::print(int flag)
 {
     //
     double value=0.0;
@@ -407,20 +407,23 @@ void Spread::print(int flag)
 
 
 
-void Spread::printMpp()
+void Model::printMpp()
 {
     std::map<NODE,std::map<NODE,double> >::iterator iter=infval.begin();
     while (iter!=infval.end()) {
         std::map<NODE,double>::iterator iter1=iter->second.begin();
+        double sum=0.0;
         while (iter1!=iter->second.end()) {
-            std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<iter1->first.node_id<<"_"<<iter1->first.net_id<<"\t"<<iter1->second<<std::endl;
+            /*std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<iter1->first.node_id<<"_"<<iter1->first.net_id<<"\t"<<iter1->second<<std::endl;
             std::vector<ADJEDGE> path=mpp[iter->first][iter1->first];
             for (int i=0; i<path.size(); i++) {
                 std::cout<<path[i].dest.node_id<<"_"<<path[i].dest.net_id<<" ("<<path[i].weight<<")\t";
             }
-            std::cout<<"\n"<<std::endl;
+            std::cout<<"\n"<<std::endl;*/
+            sum+=iter1->second;
             iter1++;
         }
+        std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<sum<<std::endl;
         iter++;
     }
 }

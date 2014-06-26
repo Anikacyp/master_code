@@ -1,17 +1,17 @@
 //
-//  Spread.h
+//  Model.h
 //  mnim
 //
 //  Created by Anika on 6/20/14.
 //
 //
 /**
- Spread means hop_based influence calculation, 
+ Model means hop_based influence calculation, 
  which calculate the influence between node pairs based on the hop propagation.
  **/
 
-#ifndef __mnim__Spread__
-#define __mnim__Spread__
+#ifndef __mnim__Model__
+#define __mnim__Model__
 #include <iostream>
 #include <map>
 #include <cstdlib>
@@ -24,7 +24,7 @@ struct infPath
     double pp;
 };
 
-class Spread
+class Model
 {
 private:
     //tmp variables
@@ -63,11 +63,11 @@ private:
     std::map<int, std::set<int> > nodenet;
 
 public:
-    Spread();
-    ~Spread();
+    Model();
+    ~Model();
     void asynICM(int node);
     void synICM(int node);
-    void spreadICM(std::set<NODE> cnode);
+    void ModelICM(std::set<NODE> cnode);
     void traversal(int flag);
     void randominf();
     void pathRecord(NODE parent,NODE child,double w);
@@ -78,4 +78,4 @@ public:
     
 };
 
-#endif /* defined(__mnim__Spread__) */
+#endif /* defined(__mnim__Model__) */

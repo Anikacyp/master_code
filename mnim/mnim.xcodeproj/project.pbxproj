@@ -16,8 +16,8 @@
 		84C6D82519532D96000EEF1C /* makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
 		84C6D8261953AC2A000EEF1C /* n1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = n1.txt; sourceTree = "<group>"; };
 		84C6D8271953AC2A000EEF1C /* n2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = n2.txt; sourceTree = "<group>"; };
-		84C6D8281953C2A7000EEF1C /* Spread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Spread.cpp; sourceTree = "<group>"; };
-		84C6D8291953C2A7000EEF1C /* Spread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Spread.h; sourceTree = "<group>"; };
+		84C6D8281953C2A7000EEF1C /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
+		84C6D8291953C2A7000EEF1C /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		84C6D82A1953CDB7000EEF1C /* limit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = limit.h; sourceTree = "<group>"; };
 		84C6D82B1957D310000EEF1C /* d1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = d1.txt; sourceTree = "<group>"; };
 		84C6D82C1957D316000EEF1C /* d2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = d2.txt; sourceTree = "<group>"; };
@@ -31,8 +31,8 @@
 			children = (
 				84C6D82419532A57000EEF1C /* BaseObj.h */,
 				84C6D82A1953CDB7000EEF1C /* limit.h */,
-				84C6D8281953C2A7000EEF1C /* Spread.cpp */,
-				84C6D8291953C2A7000EEF1C /* Spread.h */,
+				84C6D8281953C2A7000EEF1C /* Model.cpp */,
+				84C6D8291953C2A7000EEF1C /* Model.h */,
 				84C6D82D1957DB32000EEF1C /* Seed.cpp */,
 				84C6D82E1957DB32000EEF1C /* Seed.h */,
 				841DCC44195A5EA60063AFA1 /* PTree.cpp */,
