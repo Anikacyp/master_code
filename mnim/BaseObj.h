@@ -7,6 +7,7 @@
 //
 #ifndef BASEOBJ__H
 #define BASEOBJ__H
+#include <vector>
 
 struct NODE
 {

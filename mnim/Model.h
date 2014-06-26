@@ -79,6 +79,19 @@ public:
     void Dijkstra(NODE source);
     void printMpp();
     void spread();
+    
+    
+    //return variables
+    std::map<int,std::map<int,double> > getGlobalInf();
+    std::map<int,std::map<NODE,infPath> > getGIP();
+    
+    //variables for asynchronous propagation process
+    std::map<NODE,std::map<int,double> > getGlobalAsynInf();
+    std::map<NODE,std::map<NODE,infPath> > getGIPAsyn();
+    
+    //variables for maximum propagation path
+    std::map<NODE,std::map<NODE,std::vector<ADJEDGE> > > getMpp();
+    std::map<NODE,std::map<NODE,double> > getMppInf();
 };
 
 #endif /* defined(__mnim__Model__) */

@@ -10,8 +10,12 @@
 #define __mnim__Seed__
 
 #include <iostream>
+#include <vector>
+#include <map>
+#include <set>
 #include "BaseObj.H"
 #include "Heap.h"
+#include "Model.h"
 
 class Seed
 {
@@ -39,9 +43,9 @@ private:
     
     
     //variables of the results
-    std::map<int> seed_syn;
-    std::map<NODE> seed_asyn;
-    std::map<NODE> seed_mpp;
+    std::vector<int> seed_syn;
+    std::vector<NODE> seed_asyn;
+    std::vector<NODE> seed_mpp;
     
     
     //variables for the file
@@ -65,7 +69,7 @@ public:
     void buildMIA();
     void buildMOA();
     void heapData();
-    void setVariables();
+    void setVariables(Model * model);
 };
 
 #endif /* defined(__mnim__Seed__) */

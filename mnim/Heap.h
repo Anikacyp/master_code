@@ -19,6 +19,8 @@ private:
     std::vector<HeapNode> data;
     
 public:
+    Heap();
+    ~Heap();
     void heapBuild();
     void insert();
     HeapNode pop();

@@ -484,3 +484,33 @@ void Model::printMpp()
         iter++;
     }
 }
+
+
+//return variables like propagation probability between nodes and the propagation path between nodes
+std::map<int,std::map<int,double> > Model::getGlobalInf()
+{
+    return GlobalInf;
+}
+std::map<int,std::map<NODE,infPath> > Model::getGIP()
+{
+    return GIP;
+}
+//variables for asynchronous propagation process
+std::map<NODE,std::map<int,double> > Model::getGlobalAsynInf()
+{
+    return GlobalAsynInf;
+}
+std::map<NODE,std::map<NODE,infPath> > Model::getGIPAsyn()
+{
+    return GIPAsyn;
+}
+//variables for maximum propagation path
+std::map<NODE,std::map<NODE,std::vector<ADJEDGE> > > Model::getMpp()
+{
+    return mpp;
+}
+std::map<NODE,std::map<NODE,double> > Model::getMppInf()
+{
+    return infval;
+}
+
