@@ -29,9 +29,9 @@ void Model::randominf()
     std::set<int>::iterator iter=nodes.begin();
     while (iter!=nodes.end()) {
         tval=std::rand()/(double)(RAND_MAX);
-        //tval=1;
+        //tval=0.9;
         naive[*iter]=tval;
-        //std::cout<<*iter<<"\t"<<tval<<std::endl;
+        std::cout<<*iter<<"\t"<<tval<<std::endl;
         iter++;
     }
 }
@@ -213,9 +213,11 @@ void Model::MPPinf()
                 Dijkstra(node);
                 infval[node]=tmval;
                 mpp[node]=tmpp;
+                //break;
                 iter1++;
             }
         }
+        //break;
         iter++;
     }
     printMpp();
@@ -223,7 +225,9 @@ void Model::MPPinf()
 
 void Model::Dijkstra(NODE source)
 {
+    //std::cout<<"current middle node: "<<source.node_id<<"_"<<source.net_id<<std::endl;
     cans.insert(source);
+    cain.insert(source.node_id);
     std::vector<ADJEDGE> tmpadjs=adjTable[source];
     
     double tp=tmval[source];
@@ -232,6 +236,8 @@ void Model::Dijkstra(NODE source)
     double tval=0.0;
     double tvalue=0.0;
     bool flag=false;
+    //bool t1=false;
+    //bool t2=false;
     
     
     for (int i=0; i<tmpadjs.size(); i++)
@@ -239,20 +245,34 @@ void Model::Dijkstra(NODE source)
         ADJEDGE tedge=tmpadjs[i];
         if (!cans.count(tedge.dest))
         {
-            
+            //t1=false;
+            //t2=false;
             tvalue=tp*tedge.weight;
             
             if (tvalue>THETA)
             {
                 if (!tmpp.count(tedge.dest))
                 {
-                    //std::cout<<"---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
-                    if(!cain.count(tedge.dest.node_id))
-                    {
+                    if (cain.count(tedge.dest.node_id)) {
+                        if (source.node_id!=tedge.dest.node_id) {
+                            tvalue*=naive[tedge.dest.node_id];
+                            //t1=true;
+                            
+                        }
+                    }
+                    if (tvalue>THETA) {
+                        /*if (t1) {
+                            std::cout<<"不包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t但包含"<<tedge.dest.node_id<<"\t"<<tvalue<<std::endl;
+                        }
+                        std::cout<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t1\t"<<tvalue<<std::endl;*/
                         tmpp[tedge.dest]=tmpp[source];
                         tmpp[tedge.dest].push_back(tedge);
                         tmval[tedge.dest]=tvalue;
-                        cain.insert(tedge.dest.node_id);
+                    }
+                    /*if(!cain.count(tedge.dest.node_id))
+                    {
+                        
+                        //std::cout<<"不包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
                     }else
                     {
                         if (source.node_id!=tedge.dest.node_id) {
@@ -262,21 +282,51 @@ void Model::Dijkstra(NODE source)
                             tmpp[tedge.dest]=tmpp[source];
                             tmpp[tedge.dest].push_back(tedge);
                             tmval[tedge.dest]=tvalue;
+                            //std::cout<<"包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
                         }
-                    }
+                    }*/
                     
                 }else
                 {
-                    if (source.node_id!=tedge.dest.node_id) {
-                        tvalue*=naive[tedge.dest.node_id];
+                    
+                    if (cain.count(tedge.dest.node_id)) {
+                        if (source.node_id!=tedge.dest.node_id) {
+                            tvalue*=naive[tedge.dest.node_id];
+                            //t2=true;
+                            
+                        }
                     }
+                    
                     if((tvalue>THETA)&&(tvalue>tmval[tedge.dest]))
                     {
-                        //std::cout<<"---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
+                        /*if (t2) {
+                            std::cout<<"包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t也包含"<<tedge.dest.node_id<<"\t"<<tvalue<<std::endl;
+                        }
+                        std::cout<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t2\t"<<tvalue<<std::endl;*/
                         tmpp[tedge.dest]=tmpp[source];
                         tmpp[tedge.dest].push_back(tedge);
                         tmval[tedge.dest]=tvalue;
                     }
+                    /*if (cain.count(tedge.dest.node_id)) {
+                        if (source.node_id!=tedge.dest.node_id) {
+                            tvalue*=naive[tedge.dest.node_id];
+                        }
+                        if((tvalue>THETA)&&(tvalue>tmval[tedge.dest]))
+                        {
+                            std::cout<<"包含点---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
+                            tmpp[tedge.dest]=tmpp[source];
+                            tmpp[tedge.dest].push_back(tedge);
+                            tmval[tedge.dest]=tvalue;
+                        }
+                    }else
+                    {
+                        
+                        tmpp[tedge.dest]=tmpp[source];
+                        tmpp[tedge.dest].push_back(tedge);
+                        tmval[tedge.dest]=tvalue;
+                        cain.insert(tedge.dest.node_id);
+                        std::cout<<"不包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
+                    }*/
                 }
             }
         }
@@ -294,7 +344,6 @@ void Model::Dijkstra(NODE source)
         iter++;
     }
     if (flag) {
-        //std::cout<<"next middle node: "<<next.node_id<<"_"<<next.net_id<<std::endl;
         Dijkstra(next);
     }else
         return;
@@ -414,12 +463,12 @@ void Model::printMpp()
         std::map<NODE,double>::iterator iter1=iter->second.begin();
         double sum=0.0;
         while (iter1!=iter->second.end()) {
-            /*std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<iter1->first.node_id<<"_"<<iter1->first.net_id<<"\t"<<iter1->second<<std::endl;
+            std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<iter1->first.node_id<<"_"<<iter1->first.net_id<<"\t"<<iter1->second<<std::endl;
             std::vector<ADJEDGE> path=mpp[iter->first][iter1->first];
             for (int i=0; i<path.size(); i++) {
                 std::cout<<path[i].dest.node_id<<"_"<<path[i].dest.net_id<<" ("<<path[i].weight<<")\t";
             }
-            std::cout<<"\n"<<std::endl;*/
+            std::cout<<"\n"<<std::endl;
             sum+=iter1->second;
             iter1++;
         }
