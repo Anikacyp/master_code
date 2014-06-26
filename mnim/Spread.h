@@ -1,17 +1,17 @@
 //
-//  HBI.h
+//  Spread.h
 //  mnim
 //
 //  Created by Anika on 6/20/14.
 //
 //
 /**
- HBI means hop_based influence calculation, 
+ Spread means hop_based influence calculation, 
  which calculate the influence between node pairs based on the hop propagation.
  **/
 
-#ifndef __mnim__HBI__
-#define __mnim__HBI__
+#ifndef __mnim__Spread__
+#define __mnim__Spread__
 #include <iostream>
 #include <map>
 #include <cstdlib>
@@ -24,7 +24,7 @@ struct infPath
     double pp;
 };
 
-class HBI
+class Spread
 {
 private:
     //tmp variables
@@ -63,8 +63,8 @@ private:
     std::map<int, std::set<int> > nodenet;
 
 public:
-    HBI();
-    ~HBI();
+    Spread();
+    ~Spread();
     void asynICM(int node);
     void synICM(int node);
     void spreadICM(std::set<NODE> cnode);
@@ -78,4 +78,4 @@ public:
     
 };
 
-#endif /* defined(__mnim__HBI__) */
+#endif /* defined(__mnim__Spread__) */
