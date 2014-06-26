@@ -6,9 +6,9 @@
 //
 
 #include "Model.h"
-
-Model::Model()
+Model::Model(int mode)
 {
+    this->mode=mode;
     nodes.clear();
     Graph * graph=new Graph();
     graph->fileInput();
@@ -19,6 +19,7 @@ Model::Model()
     randominf();
     delete graph;
 }
+
 
 Model::~Model(){}
 
@@ -36,6 +37,18 @@ void Model::randominf()
     }
 }
 
+void Model::spread()
+{
+    if (mode==1) {
+        traversal(1);
+    }
+    if (mode==2) {
+        traversal(2);
+    }
+    if (mode==3) {
+        MPPinf();
+    }
+}
 
 void Model::traversal(int flag)
 {
@@ -59,10 +72,10 @@ void Model::traversal(int flag)
         }
         iter++;
     }
-    if (flag==1)
+    /*if (flag==1)
         print(1);
     else
-        print(2);
+        print(2);*/
 }
 
 //syncICM treat the nodes which has the same node_id were activated at the same time.
@@ -86,7 +99,7 @@ void Model::synICM(int node)
         iter++;
     }
     //propagation simulate
-    ModelICM(Can);
+    SpreadICM(Can);
 }
 
 //asynICM treats the nodes which has the same node_id were randomly activated
@@ -109,7 +122,7 @@ void Model::asynICM(int node)
         tmpGinf[node]=0;
         pathRecord(tn,tn,1.0);
         
-        ModelICM(Can);
+        SpreadICM(Can);
         
         GlobalAsynInf[tn]=tmpGinf;
         GIPAsyn[tn]=tmppath;
@@ -119,7 +132,7 @@ void Model::asynICM(int node)
     
 }
 
-void Model::ModelICM(std::set<NODE> can)
+void Model::SpreadICM(std::set<NODE> can)
 {
     std::set<NODE> tCan;
     std::set<NODE>::iterator iter=can.begin();
@@ -136,7 +149,6 @@ void Model::ModelICM(std::set<NODE> can)
                     
                     if (!nodeStatus.count(tadj[i].dest))
                     {
-                        //std::cout<<iter->node_id<<"_"<<iter->net_id<<"\t"<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<"\t"<<tval<<std::endl;
                         if (tmpGinf.count(tadj[i].dest.node_id))
                         {
                             if ((*iter).node_id==tadj[i].dest.node_id)
@@ -146,7 +158,6 @@ void Model::ModelICM(std::set<NODE> can)
                                 nodeStatus[tadj[i].dest]=1;
                                 tmpGinf[tadj[i].dest.node_id]*=(1-tval);
                                 pathRecord(*iter,tadj[i].dest,tadj[i].weight);
-                                //std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf包含"<<tadj[i].dest.node_id<<"\t自身传播\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
                             }else
                             {
                                 tval*=naive[tadj[i].dest.node_id];
@@ -157,7 +168,6 @@ void Model::ModelICM(std::set<NODE> can)
                                     nodeStatus[tadj[i].dest]=1;
                                     tmpGinf[tadj[i].dest.node_id]*=(1-tval);
                                     pathRecord(*iter,tadj[i].dest,tadj[i].weight*naive[tadj[i].dest.node_id]);
-                                    //std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf包含"<<tadj[i].dest.node_id<<"\t非自身传播\t"<<tval<<"\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
                                 }
                             }
                         }else
@@ -178,11 +188,12 @@ void Model::ModelICM(std::set<NODE> can)
         iter++;
     }
     if (tCan.size()>0) {
-        ModelICM(tCan);
+        SpreadICM(tCan);
     }else
         return;
 }
 
+//using the maximum propagation path as the approximately influence propagation value
 void Model::MPPinf()
 {
     std::set<int>::iterator iter=nodes.begin();
@@ -220,9 +231,10 @@ void Model::MPPinf()
         //break;
         iter++;
     }
-    printMpp();
+   // printMpp();
 }
 
+//using maximum propagation probability as the probability which calculated by the dijkstra algorithm
 void Model::Dijkstra(NODE source)
 {
     //std::cout<<"current middle node: "<<source.node_id<<"_"<<source.net_id<<std::endl;
@@ -263,8 +275,7 @@ void Model::Dijkstra(NODE source)
                     if (tvalue>THETA) {
                         /*if (t1) {
                             std::cout<<"不包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t但包含"<<tedge.dest.node_id<<"\t"<<tvalue<<std::endl;
-                        }
-                        std::cout<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t1\t"<<tvalue<<std::endl;*/
+                        }*/
                         tmpp[tedge.dest]=tmpp[source];
                         tmpp[tedge.dest].push_back(tedge);
                         tmval[tedge.dest]=tvalue;
@@ -301,8 +312,7 @@ void Model::Dijkstra(NODE source)
                     {
                         /*if (t2) {
                             std::cout<<"包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t也包含"<<tedge.dest.node_id<<"\t"<<tvalue<<std::endl;
-                        }
-                        std::cout<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t2\t"<<tvalue<<std::endl;*/
+                        }*/
                         tmpp[tedge.dest]=tmpp[source];
                         tmpp[tedge.dest].push_back(tedge);
                         tmval[tedge.dest]=tvalue;
@@ -349,6 +359,7 @@ void Model::Dijkstra(NODE source)
         return;
 }
 
+//record the propagation path. which mainly record the path based on the hop process
 void Model::pathRecord(NODE parent, NODE child, double w)
 {
     std::vector<ADJEDGE> path;
@@ -391,7 +402,6 @@ void Model::print(int flag)
                 titer++;
             }
             std::cout<<"    ("<<iter->first<<"\t"<<value<<")     \n\n"<<std::endl;
-            //std::cout<<"------------------------"<<std::endl;
             iter++;
         }
     //
@@ -452,8 +462,6 @@ void Model::print(int flag)
         }
     }
 }
-
-
 
 
 void Model::printMpp()

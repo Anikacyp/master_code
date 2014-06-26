@@ -62,12 +62,18 @@ struct NetPair
 };
 
 
-
 struct NodeInfPair
 {
     int node;
     double pp;
     std::vector<std::vector<NODE> > paths;
+};
+
+struct HeapNode
+{
+    NODE node;
+    double value;
+    int status;
 };
 
 #endif

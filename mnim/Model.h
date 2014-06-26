@@ -27,7 +27,8 @@ struct infPath
 class Model
 {
 private:
-    //tmp variables
+    int mode;
+    
     //nodeStatus store the nodes status.
     std::map<NODE,int> nodeStatus;
     //CAN store the current active nodes;
@@ -49,8 +50,9 @@ private:
     
     //variables for maximum propagation path
     std::map<NODE,std::map<NODE,std::vector<ADJEDGE> > > mpp;
-    std::map<NODE,std::vector<ADJEDGE> >tmpp;
     std::map<NODE,std::map<NODE,double> > infval;
+    
+    std::map<NODE,std::vector<ADJEDGE> >tmpp;
     std::map<NODE,double> tmval;
     std::set<NODE> cans;
     NODE current_node;
@@ -61,13 +63,14 @@ private:
     std::set<int> nodes;
     std::map<int,double> naive;
     std::map<int, std::set<int> > nodenet;
-
+    
+    
 public:
-    Model();
+    Model(int mode);
     ~Model();
     void asynICM(int node);
     void synICM(int node);
-    void ModelICM(std::set<NODE> cnode);
+    void SpreadICM(std::set<NODE> cnode);
     void traversal(int flag);
     void randominf();
     void pathRecord(NODE parent,NODE child,double w);
@@ -75,7 +78,7 @@ public:
     void MPPinf();
     void Dijkstra(NODE source);
     void printMpp();
-    
+    void spread();
 };
 
 #endif /* defined(__mnim__Model__) */

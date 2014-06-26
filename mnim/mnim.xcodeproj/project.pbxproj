@@ -9,6 +9,8 @@
 /* Begin PBXFileReference section */
 		841DCC44195A5EA60063AFA1 /* PTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PTree.cpp; sourceTree = "<group>"; };
 		841DCC45195A5EA60063AFA1 /* PTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTree.h; sourceTree = "<group>"; };
+		844E0FD7195C08FE00DA7C06 /* Heap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Heap.cpp; sourceTree = "<group>"; };
+		844E0FD8195C08FE00DA7C06 /* Heap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Heap.h; sourceTree = "<group>"; };
 		84C6D81C195323A8000EEF1C /* Graph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Graph.cpp; sourceTree = "<group>"; };
 		84C6D81D195323A8000EEF1C /* Graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
 		84C6D822195323F6000EEF1C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -19,8 +21,6 @@
 		84C6D8281953C2A7000EEF1C /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		84C6D8291953C2A7000EEF1C /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		84C6D82A1953CDB7000EEF1C /* limit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = limit.h; sourceTree = "<group>"; };
-		84C6D82B1957D310000EEF1C /* d1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = d1.txt; sourceTree = "<group>"; };
-		84C6D82C1957D316000EEF1C /* d2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = d2.txt; sourceTree = "<group>"; };
 		84C6D82D1957DB32000EEF1C /* Seed.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Seed.cpp; sourceTree = "<group>"; };
 		84C6D82E1957DB32000EEF1C /* Seed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Seed.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -29,22 +29,22 @@
 		84C6D81519532394000EEF1C = {
 			isa = PBXGroup;
 			children = (
+				84C6D822195323F6000EEF1C /* main.cpp */,
 				84C6D82419532A57000EEF1C /* BaseObj.h */,
 				84C6D82A1953CDB7000EEF1C /* limit.h */,
-				84C6D8281953C2A7000EEF1C /* Model.cpp */,
-				84C6D8291953C2A7000EEF1C /* Model.h */,
-				84C6D82D1957DB32000EEF1C /* Seed.cpp */,
-				84C6D82E1957DB32000EEF1C /* Seed.h */,
-				841DCC44195A5EA60063AFA1 /* PTree.cpp */,
-				841DCC45195A5EA60063AFA1 /* PTree.h */,
 				84C6D81C195323A8000EEF1C /* Graph.cpp */,
 				84C6D81D195323A8000EEF1C /* Graph.h */,
-				84C6D822195323F6000EEF1C /* main.cpp */,
+				84C6D8281953C2A7000EEF1C /* Model.cpp */,
+				84C6D8291953C2A7000EEF1C /* Model.h */,
+				841DCC44195A5EA60063AFA1 /* PTree.cpp */,
+				841DCC45195A5EA60063AFA1 /* PTree.h */,
+				84C6D82D1957DB32000EEF1C /* Seed.cpp */,
+				84C6D82E1957DB32000EEF1C /* Seed.h */,
+				844E0FD7195C08FE00DA7C06 /* Heap.cpp */,
+				844E0FD8195C08FE00DA7C06 /* Heap.h */,
 				84C6D82519532D96000EEF1C /* makefile */,
 				84C6D8261953AC2A000EEF1C /* n1.txt */,
 				84C6D8271953AC2A000EEF1C /* n2.txt */,
-				84C6D82B1957D310000EEF1C /* d1.txt */,
-				84C6D82C1957D316000EEF1C /* d2.txt */,
 			);
 			sourceTree = "<group>";
 		};

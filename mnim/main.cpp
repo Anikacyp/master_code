@@ -9,9 +9,8 @@
 #include "Model.h"
 int main(int agrc, char * argv[])
 {
-    Model *model=new Model();
-    model->MPPinf();
-    //hbi->traversal(2);
+    Model *model=new Model(3);
+    model->spread();
     delete model;
     return 1;
 }
