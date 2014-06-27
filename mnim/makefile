@@ -11,7 +11,7 @@ Model.o: Model.cpp Model.h Graph.h limit.h
 	$(cc) -c Model.cpp
 Seed.o: Seed.cpp Seed.h Model.h BaseObj.h Heap.h
 	$(cc) -c Seed.cpp
-Heap.o: Heap.cpp Heap.h BaseObj.h
+Heap.o: Heap.cpp Heap.h
 	$(cc) -c Heap.cpp
 .PYTHON:clean
 clean:

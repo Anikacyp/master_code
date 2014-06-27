@@ -17,7 +17,7 @@ class Heap
 {
 private:
     std::vector<HeapNode> data;
-    
+    int size;
 public:
     Heap();
     ~Heap();
@@ -27,6 +27,7 @@ public:
     
     void insert();
     HeapNode pop();
+    void print(std::vector<HeapNode> & data);
     void swap(std::vector<HeapNode> & data,int p1,int p2);
 };
 #endif /* defined(__mnim__Heap__) */
