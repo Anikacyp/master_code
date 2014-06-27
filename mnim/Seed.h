@@ -32,7 +32,7 @@ private:
     
     //variables for maximum propagation path
     std::map<NODE,std::map<NODE,std::vector<ADJEDGE> > > mpp;
-    std::map<NODE,std::map<NODE,double> > infval;
+    std::map<NODE,std::map<NODE,double> > mppInf;
     
     
     // graph variables
@@ -49,7 +49,7 @@ private:
     
     
     //variables for the file
-    std::vector<HeapNode> HeapData;
+    std::vector<HeapNode> heapData;
     /**
      note: mode means the propagation mode
      if(mode==1)
@@ -68,7 +68,7 @@ public:
     void topkSeed();
     void buildMIA();
     void buildMOA();
-    void heapData();
+    void setHeapData();
     void setVariables(Model * model);
 };
 

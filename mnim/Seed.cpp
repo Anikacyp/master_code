@@ -28,22 +28,42 @@ Seed::Seed(int mode)
 
 Seed::~Seed(){}
 
-void Seed::topkSeed()
-{
-    
-}
-
-void Seed::heapData()
+void Seed::setHeapData()
 {
     if (mode==1) {
-        
+        std::map<int,std::map<int,double> >::iterator iter=GlobalInf.begin();
+        while (iter!=GlobalInf.end()) {
+            NODE tn(iter->first,0);
+            HeapNode hnode;
+            double sumval=0.0;
+            hnode.node=tn;
+            std::map<int,double>::iterator iterinner=iter->second.begin();
+            while (iterinner!=iter->second.end()) {
+                sumval+=iterinner->second;
+                iterinner++;
+            }
+            heapData.push_back(hnode);
+            iter++;
+        }
     }
     if (mode==2) {
-        
+        std::map<NODE,std::map<int,double> >::iterator iter=GlobalAsynInf.begin();
+        while (iter!=GlobalAsynInf.end()) {
+            HeapNode hnode;
+            double sumval=0.0;
+            hnode.node=iter->first;
+            std::map<int,double>::iterator iterinner=iter->second.begin();
+            while (iterinner!=iter->second.end()) {
+                sumval+=iterinner->second;
+                iterinner++;
+            }
+            heapData.push_back(hnode);
+            iter++;
+        }
     }
     if (mode==3) {
-        std::map<NODE,std::map<NODE,double> >::iterator iter=infval.begin();
-        while (iter!=infval.end()) {
+        std::map<NODE,std::map<NODE,double> >::iterator iter=mppInf.begin();
+        while (iter!=mppInf.end()) {
             HeapNode hnode;
             double sumval=0.0;
             hnode.node=iter->first;
@@ -52,7 +72,7 @@ void Seed::heapData()
                 sumval+=iterinner->second;
                 iterinner++;
             }
-            HeapData.push_back(hnode);
+            heapData.push_back(hnode);
             iter++;
         }
     }
@@ -60,20 +80,31 @@ void Seed::heapData()
 
 void Seed::setVariables(Model * model)
 {
+    //variables for synchronous propagation process
     if (this->mode==1) {
-        //variables for synchronous propagation process
         GlobalInf=model->getGlobalInf();
         GIP=model->getGIP();
     }
+    
+    //variables for asynchronous propagation process
     if (this->mode==2) {
-        //variables for asynchronous propagation process
        GlobalAsynInf=model->getGlobalAsynInf();
        GIPAsyn=model->getGIPAsyn();
     }
+    
+    //variables for maximum propagation path
     if(this->mode==3)
     {
-        //variables for maximum propagation path
         mpp=model->getMpp();
-        infval=model->getMppInf();
+        mppInf=model->getMppInf();
     }
 }
+
+
+void Seed::topkSeed()
+{
+    
+}
+
+
+

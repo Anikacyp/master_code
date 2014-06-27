@@ -21,9 +21,12 @@ private:
 public:
     Heap();
     ~Heap();
-    void heapBuild();
+    void buildHeap(std::vector<HeapNode> &data);
+    void heapSort(std::vector<HeapNode> &data);
+    void heapAdjust(std::vector<HeapNode> &data,int pos);
+    
     void insert();
     HeapNode pop();
-    
+    void swap(std::vector<HeapNode> & data,int p1,int p2);
 };
 #endif /* defined(__mnim__Heap__) */
