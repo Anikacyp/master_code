@@ -22,3 +22,20 @@ void TreeNode::insertChild(TreeNode & node)
     TreeNode *p=&node;
     children.push_back(p);
 }
+
+PTree::PTree(NODE root)
+{
+    this->root=root;
+}
+
+PTree::~PTroot()
+{}
+
+void PTree::build(std::map<NODE,std::vector<ADJEDGE> > mpp)
+{
+    std::map<NODE,std::vector<ADJEDGE> >::iterator iter=mpp.begin();
+    while (iter!=mpp.end()) {
+        
+        iter++;
+    }
+}

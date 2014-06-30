@@ -59,7 +59,6 @@ struct NetPair
     }
     NetPair(){}
     NetPair(int n1,int n2):net1(n1),net2(n2){}
-    //NETIF(NETIF& nif):net1(nif.net1),net2(nif.net2){}
 };
 
 

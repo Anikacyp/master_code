@@ -47,6 +47,7 @@ void Model::spread()
     }
     if (mode==3) {
         MPPinf();
+        printMpp();
     }
 }
 
