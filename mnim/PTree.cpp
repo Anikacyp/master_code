@@ -28,14 +28,18 @@ PTree::PTree(NODE root)
     this->root=root;
 }
 
-PTree::~PTroot()
+PTree::~PTree()
 {}
 
 void PTree::build(std::map<NODE,std::vector<ADJEDGE> > mpp)
 {
     std::map<NODE,std::vector<ADJEDGE> >::iterator iter=mpp.begin();
     while (iter!=mpp.end()) {
-        
+        //obviously the first element is the leaf node, and it also the source of the propagation
+        std::vector<ADJEDGE> path=iter->second;
+        for (int i=path.size()-1; i>=0; i--) {
+            
+        }
         iter++;
     }
 }

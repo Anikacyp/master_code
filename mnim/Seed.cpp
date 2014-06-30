@@ -15,13 +15,12 @@ Seed::Seed(){
 Seed::Seed(int mode)
 {
     this->mode=mode;
-    if(mode!=1 || mode!=2 || mode!=3)
-        return;
-    else
+    if(mode==1 || mode==2 || mode==3)
     {
         Model *model=new Model(mode);
         model->spread();
         setVariables(model);
+        buildMIA();
         delete model;
     }
 }
@@ -97,6 +96,69 @@ void Seed::setVariables(Model * model)
     {
         mpp=model->getMpp();
         mppInf=model->getMppInf();
+    }
+}
+
+
+void Seed::buildMIA()
+{
+    std::map<NODE,std::map<NODE,std::vector<ADJEDGE> > > intree;
+    if (this->mode==1) {
+        /*std::map<int,std::map<NODE,infPath> >::iterator iter=GIP.begin;
+        while (iter!=GIP.end()) {
+            std::map<NODE,infPath>::iterator iter1=iter->second.begin();
+            while (iter1!=iter->second.end()) {
+                if (intree.count(iter1->first)) {
+                    if (!intree[iter1->first].count(iter->first)) {
+                        intree[iter1->first][iter->first]=iter1->second.path;
+                    }
+                }else
+                {
+                    intree[iter1->first][iter->first]=iter1->second.path;
+                }
+                iter1++;
+            }
+            iter++;
+        }*/
+    }
+    if (this->mode==2) {
+        std::map<NODE,std::map<NODE,infPath> >::iterator iter=GIPAsyn.begin();
+        while (iter!=GIPAsyn.end()) {
+            std::map<NODE,infPath>::iterator iter1=iter->second.begin();
+            while (iter1!=iter->second.end()) {
+                if (intree.count(iter1->first)) {
+                    if (!intree[iter1->first].count(iter->first)) {
+                        intree[iter1->first][iter->first]=iter1->second.path;
+                    }
+                }else
+                {
+                    intree[iter1->first][iter->first]=iter1->second.path;
+                }
+                iter1++;
+            }
+            iter++;
+        }
+    }
+    if (this->mode==3) {
+        
+        std::map<NODE,std::map<NODE,std::vector<ADJEDGE> > >::iterator iter=mpp.begin();
+        while (iter!=mpp.end()) {
+            std::map<NODE,std::vector<ADJEDGE> >::iterator iter1=iter->second.begin();
+			while (iter1!=iter->second.end()) {
+                
+                if (intree.count(iter1->first)) {
+                    if (!intree[iter1->first].count(iter->first)) {
+                        intree[iter1->first][iter->first]=iter1->second;
+                    }
+                }else
+                {
+                    intree[iter1->first][iter->first]=iter1->second;
+                }
+                iter1++;
+            }
+            iter++;
+        }
+        std::cout<<"total size: "<<intree.size()<<std::endl;
     }
 }
 

@@ -39,11 +39,9 @@ void Model::randominf()
 
 void Model::spread()
 {
-    if (mode==1) {
-        traversal(1);
-    }
-    if (mode==2) {
-        traversal(2);
+    if (mode!=3) {
+        traversal(mode);
+        print(mode);
     }
     if (mode==3) {
         MPPinf();
