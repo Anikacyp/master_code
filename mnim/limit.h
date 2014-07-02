@@ -10,6 +10,6 @@
 
 #define NUM_ITER 2000
 #define SEED_SIZE 10
-#define THETA 0.0
+#define THETA 0.05
 
 #endif

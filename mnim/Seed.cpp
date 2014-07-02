@@ -15,7 +15,7 @@ Seed::Seed(){
 Seed::Seed(int mode)
 {
     this->mode=mode;
-    if(mode==1 || mode==2 || mode==3)
+    if(mode==0 || mode==1 || mode==2 || mode==3)
     {
         Model *model=new Model(mode);
         model->spread();

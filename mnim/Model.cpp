@@ -12,14 +12,14 @@ Model::Model(int mode)
     nodes.clear();
     Graph * graph=new Graph();
     graph->fileInput();
-    graph->graphBuilding();
+    //graph->graphBuilding();
     this->nodes=graph->getNodes();
     this->adjTable=graph->getAdjTable();
     this->nodenet=graph->getNodeNet();
     randominf();
+    //nodeIntraInf();
     delete graph;
 }
-
 
 Model::~Model(){}
 
@@ -30,23 +30,56 @@ void Model::randominf()
     std::set<int>::iterator iter=nodes.begin();
     while (iter!=nodes.end()) {
         tval=std::rand()/(double)(RAND_MAX);
-        //tval=0.9;
         naive[*iter]=tval;
-        std::cout<<*iter<<"\t"<<tval<<std::endl;
         iter++;
     }
 }
 
+
+int Model::randnum(int size)
+{
+    std::srand(unsigned(time(0)));
+    return std::rand()%(size);
+}
+
+
 void Model::spread()
 {
-    if (mode!=3) {
+    if (mode==0) {
+        std::set<int>::iterator iter=nodes.begin();
+        while (iter!=nodes.end()) {
+            std::set<int>::iterator iter1=nodenet[*iter].begin();
+            while (iter1!=nodenet[*iter].end()) {
+                can.clear();
+                tmpinf.clear();
+                tmppath.clear();
+                nodeStatus.clear();
+                cain.clear();
+                
+                NODE node(*iter,*iter1);
+                
+                can.push_back(node);
+                cain.insert(node.node_id);
+                nodeStatus[node]=1;
+                tmpinf[node]=1.0;
+                pathRecord(node,node,1.0);
+                
+                spreadTree(can);
+                pTreeInf[node]=tmpinf;
+                pTreePath[node]=tmppath;
+                iter1++;
+            }
+            iter++;
+        }
+       
+    }
+    if (mode==1 || mode==2) {
         traversal(mode);
-        print(mode);
     }
     if (mode==3) {
         MPPinf();
-        printMpp();
     }
+    //print(mode);
 }
 
 void Model::traversal(int flag)
@@ -54,31 +87,62 @@ void Model::traversal(int flag)
     std::set<int>::iterator iter=nodes.begin();
     while (iter!=nodes.end()) {
         if (flag==1) {
-            //intialize the variable as empty
             nodeStatus.clear();
             Can.clear();
             tmpinf.clear();
             tmpGinf.clear();
-            //path record
             tmppath.clear();
             
-            synICM(*iter);
+            //synICM(*iter);
+            //!!
+            tmpGinf[*iter]=1;
+            std::set<int>::iterator iter1=nodenet[*iter].begin();
+            while (iter1!=nodenet[*iter].end()) {
+                NODE tn(*iter,*iter1);
+                Can.insert(tn);
+                tmpinf[tn]=1;
+                nodeStatus[tn]=1;
+                tmpGinf[*iter]=0;
+                pathRecord(tn,tn,1.0);
+                iter1++;
+            }
+            SpreadICM(Can);
+            
             GlobalInf[*iter]=tmpGinf;
             GIP[*iter]=tmppath;
         }else
         {
-            asynICM(*iter);
+            //asynICM(*iter);
+            std::set<int>::iterator iter1=nodenet[*iter].begin();
+            while (iter1!=nodenet[*iter].end()) {
+                NODE tn(*iter,*iter1);
+                
+                //initialize:
+                nodeStatus.clear();
+                Can.clear();
+                tmpinf.clear();
+                tmpGinf.clear();
+                tmppath.clear();
+                
+                Can.insert(tn);
+                tmpinf[tn]=1;
+                tmpGinf[*iter]=0;
+                pathRecord(tn,tn,1.0);
+                
+                SpreadICM(Can);
+                
+                GlobalAsynInf[tn]=tmpGinf;
+                GIPAsyn[tn]=tmppath;
+                
+                iter1++;
+            }
         }
         iter++;
     }
-    /*if (flag==1)
-        print(1);
-    else
-        print(2);*/
 }
 
 //syncICM treat the nodes which has the same node_id were activated at the same time.
-void Model::synICM(int node)
+/*void Model::synICM(int node)
 {
     tmpGinf[node]=1;
     
@@ -129,6 +193,60 @@ void Model::asynICM(int node)
         iter++;
     }
     
+}*/
+void Model::spreadTree(std::vector<NODE> node)
+{
+    std::vector<NODE> tCan;
+    while (node.size()>0) {
+        //隨機生成下一個訪問點的位置
+        int pos=randnum(node.size());
+        //獲得并記錄該點
+        NODE tmpnode=node[pos];
+        //刪除該點
+        std::vector<NODE>::iterator iter=node.begin();
+        iter+=pos;
+        node.erase(iter);
+        //std::cout<<pos<<"\t"<<tmpnode.node_id<<"_"<<tmpnode.net_id<<std::endl;
+        //由此點開始進行傳播
+        if (adjTable.count(tmpnode)) {
+            std::vector<ADJEDGE> adjnodes=adjTable[tmpnode];
+            for (int i=0; i<adjnodes.size(); i++) {
+                if (!nodeStatus.count(adjnodes[i].dest)) {
+                	double tval=tmpinf[tmpnode]*adjnodes[i].weight;
+                	if (tval>THETA) {
+                  		if (cain.count(adjnodes[i].dest.node_id)) {
+                            if (tmpnode.node_id==adjnodes[i].dest.node_id) {
+                                tmpinf[adjnodes[i].dest]=tval;
+                                tCan.push_back(adjnodes[i].dest);
+                                nodeStatus[adjnodes[i].dest]=1;
+                                pathRecord(tmpnode,adjnodes[i].dest,adjnodes[i].weight);
+                            }else
+                            {
+                                tval*=naive[adjnodes[i].dest.node_id];
+                                if (tval>THETA) {
+                                    tmpinf[adjnodes[i].dest]=tval;
+                                    tCan.push_back(adjnodes[i].dest);
+                                    nodeStatus[adjnodes[i].dest]=1;
+                                    pathRecord(tmpnode,adjnodes[i].dest,adjnodes[i].weight*naive[adjnodes[i].dest.node_id]);
+                                }
+                            }
+                        }else
+                        {
+                        	tmpinf[adjnodes[i].dest]=tval;
+                            tCan.push_back(adjnodes[i].dest);
+                            nodeStatus[adjnodes[i].dest]=1;
+                            pathRecord(tmpnode,adjnodes[i].dest,adjnodes[i].weight);
+                        }
+                	}
+                }
+            }
+        }
+        nodeStatus[tmpnode]=2;
+        if (tCan.size()>0) {
+            spreadTree(tCan);
+        }else
+            return;
+    }
 }
 
 void Model::SpreadICM(std::set<NODE> can)
@@ -176,7 +294,6 @@ void Model::SpreadICM(std::set<NODE> can)
                             nodeStatus[tadj[i].dest]=1;
                             tmpGinf[tadj[i].dest.node_id]=(1-tval);
                             pathRecord(*iter,tadj[i].dest,tadj[i].weight);
-                            //std::cout<<"nodeStatus暂不包含 "<<tadj[i].dest.node_id<<"_"<<tadj[i].dest.net_id<<" 并且tmpGinf不包含"<<tadj[i].dest.node_id<<"\t非自身传播\t"<<tmpGinf[tadj[i].dest.node_id]<<std::endl;
                         }
                     }
                 }
@@ -236,7 +353,6 @@ void Model::MPPinf()
 //using maximum propagation probability as the probability which calculated by the dijkstra algorithm
 void Model::Dijkstra(NODE source)
 {
-    //std::cout<<"current middle node: "<<source.node_id<<"_"<<source.net_id<<std::endl;
     cans.insert(source);
     cain.insert(source.node_id);
     std::vector<ADJEDGE> tmpadjs=adjTable[source];
@@ -272,29 +388,10 @@ void Model::Dijkstra(NODE source)
                         }
                     }
                     if (tvalue>THETA) {
-                        /*if (t1) {
-                            std::cout<<"不包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t但包含"<<tedge.dest.node_id<<"\t"<<tvalue<<std::endl;
-                        }*/
                         tmpp[tedge.dest]=tmpp[source];
                         tmpp[tedge.dest].push_back(tedge);
                         tmval[tedge.dest]=tvalue;
                     }
-                    /*if(!cain.count(tedge.dest.node_id))
-                    {
-                        
-                        //std::cout<<"不包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
-                    }else
-                    {
-                        if (source.node_id!=tedge.dest.node_id) {
-                            tvalue*=naive[tedge.dest.node_id];
-                        }
-                        if (tvalue>THETA) {
-                            tmpp[tedge.dest]=tmpp[source];
-                            tmpp[tedge.dest].push_back(tedge);
-                            tmval[tedge.dest]=tvalue;
-                            //std::cout<<"包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
-                        }
-                    }*/
                     
                 }else
                 {
@@ -309,33 +406,10 @@ void Model::Dijkstra(NODE source)
                     
                     if((tvalue>THETA)&&(tvalue>tmval[tedge.dest]))
                     {
-                        /*if (t2) {
-                            std::cout<<"包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t也包含"<<tedge.dest.node_id<<"\t"<<tvalue<<std::endl;
-                        }*/
                         tmpp[tedge.dest]=tmpp[source];
                         tmpp[tedge.dest].push_back(tedge);
                         tmval[tedge.dest]=tvalue;
                     }
-                    /*if (cain.count(tedge.dest.node_id)) {
-                        if (source.node_id!=tedge.dest.node_id) {
-                            tvalue*=naive[tedge.dest.node_id];
-                        }
-                        if((tvalue>THETA)&&(tvalue>tmval[tedge.dest]))
-                        {
-                            std::cout<<"包含点---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
-                            tmpp[tedge.dest]=tmpp[source];
-                            tmpp[tedge.dest].push_back(tedge);
-                            tmval[tedge.dest]=tvalue;
-                        }
-                    }else
-                    {
-                        
-                        tmpp[tedge.dest]=tmpp[source];
-                        tmpp[tedge.dest].push_back(tedge);
-                        tmval[tedge.dest]=tvalue;
-                        cain.insert(tedge.dest.node_id);
-                        std::cout<<"不包含---"<<tedge.dest.node_id<<"_"<<tedge.dest.net_id<<"\t"<<tvalue<<std::endl;
-                    }*/
                 }
             }
         }
@@ -389,6 +463,41 @@ void Model::print(int flag)
 {
     //
     double value=0.0;
+    if (flag==0) {
+        std::map<NODE,std::map<NODE,double> >::iterator iter=pTreeInf.begin();
+        while (iter!=pTreeInf.end()) {
+            value=0.0;
+            std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<std::endl;
+            std::map<NODE,double>::iterator iter1=iter->second.begin();
+            while (iter1!=iter->second.end()) {
+                value+=iter1->second;
+                std::cout<<iter1->first.node_id<<"_"<<iter1->first.net_id<<"\t"<<iter1->second<<std::endl;
+                iter1++;
+            }
+            std::cout<<"influence value"<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<value<<std::endl;
+            iter++;
+        }
+        
+        std::map<NODE,std::map<NODE,infPath> >::iterator iter2=pTreePath.begin();
+        while (iter2!=pTreePath.end()) {
+            std::cout<<"current propagation path of node "<<iter2->first.node_id<<"_"<<iter2->first.net_id<<std::endl;
+            std::map<NODE,infPath>::iterator piter=iter2->second.begin();
+            while (piter!=iter2->second.end()) {
+                std::cout<<piter->first.node_id<<"_"<<piter->first.net_id<<":\t";
+                std::vector<ADJEDGE> adjs=piter->second.path;
+                std::vector<ADJEDGE>::iterator aiter=adjs.begin();
+                while (aiter!=adjs.end()) {
+                    std::cout<<aiter->dest.node_id<<"_"<<aiter->dest.net_id<<"("<<aiter->weight<<")\t";
+                    aiter++;
+                }
+                std::cout<<"\tPP:\t"<<piter->second.pp<<std::endl;
+                piter++;
+            }
+            std::cout<<std::endl;
+            iter2++;
+        }
+    }
+    
     if (flag==1) {
         std::cout<<"result-----------------pp---------------------"<<std::endl;
         std::map<int,std::map<int,double> >::iterator iter=GlobalInf.begin();
@@ -423,8 +532,9 @@ void Model::print(int flag)
             std::cout<<std::endl;
             iter2++;
         }
-    }else
-    {
+    }
+    
+    if (flag==2) {
         std::cout<<"result-----------------pp---------------------"<<std::endl;
         std::map<NODE,std::map<int,double> >::iterator iter=GlobalAsynInf.begin();
         while (iter!=GlobalAsynInf.end()) {
@@ -460,28 +570,26 @@ void Model::print(int flag)
             iter2++;
         }
     }
-}
-
-
-void Model::printMpp()
-{
-    std::map<NODE,std::map<NODE,double> >::iterator iter=infval.begin();
-    while (iter!=infval.end()) {
-        std::map<NODE,double>::iterator iter1=iter->second.begin();
-        double sum=0.0;
-        while (iter1!=iter->second.end()) {
-            std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<iter1->first.node_id<<"_"<<iter1->first.net_id<<"\t"<<iter1->second<<std::endl;
-            std::vector<ADJEDGE> path=mpp[iter->first][iter1->first];
-            for (int i=0; i<path.size(); i++) {
-                std::cout<<path[i].dest.node_id<<"_"<<path[i].dest.net_id<<" ("<<path[i].weight<<")\t";
+    if (flag==3) {
+        std::map<NODE,std::map<NODE,double> >::iterator iter=infval.begin();
+        while (iter!=infval.end()) {
+            std::map<NODE,double>::iterator iter1=iter->second.begin();
+            double sum=0.0;
+            while (iter1!=iter->second.end()) {
+                std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<iter1->first.node_id<<"_"<<iter1->first.net_id<<"\t"<<iter1->second<<std::endl;
+                std::vector<ADJEDGE> path=mpp[iter->first][iter1->first];
+                for (int i=0; i<path.size(); i++) {
+                    std::cout<<path[i].dest.node_id<<"_"<<path[i].dest.net_id<<" ("<<path[i].weight<<")\t";
+                }
+                std::cout<<"\n"<<std::endl;
+                sum+=iter1->second;
+                iter1++;
             }
-            std::cout<<"\n"<<std::endl;
-            sum+=iter1->second;
-            iter1++;
+            std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<sum<<std::endl;
+            iter++;
         }
-        std::cout<<iter->first.node_id<<"_"<<iter->first.net_id<<"\t"<<sum<<std::endl;
-        iter++;
     }
+    
 }
 
 

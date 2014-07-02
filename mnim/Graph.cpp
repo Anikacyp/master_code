@@ -16,7 +16,6 @@ std::map<int,std::set<int> > Graph::netnodes;
 std::map<int,std::set<int> > Graph::nodenet;
 
 Graph::Graph(){
-    //nodes.clear();
 }
 Graph::~Graph(){}
 
@@ -31,7 +30,7 @@ void Graph::fileInput()
         files.push_back(file);
     }
     
-    if (this->network_NO>1)
+    /*if (this->network_NO>1)
     {
         for (int i=1; i<=network_NO; i++)
         {
@@ -47,10 +46,23 @@ void Graph::fileInput()
                 j++;
             }
         }
-    }
-    std::cout<<"\n"<<std::endl;
+    }*/
+    graphBuilding();
+    std::cout<<"node number: "<<nodes.size()<<std::endl;
 }
 
+
+void Graph::nodeIntraInf()
+{
+    std::srand(unsigned(time(0)));
+    double tval=0.0;
+    std::set<int>::iterator iter=nodes.begin();
+    while (iter!=nodes.end()) {
+        tval=std::rand()/(double)(RAND_MAX);
+        iin[*iter]=tval;
+        iter++;
+    }
+}
 
 
 void Graph::graphBuilding()
@@ -109,18 +121,22 @@ void Graph::graphBuilding()
         }
         ifile.close();
     }
+    
+    nodeIntraInf();
     netinfGraph();
 }
 
 void Graph::netinfGraph()
 {
+    
+    
     for (int i=1; i<=this->network_NO; i++) {
         for (int j=1; j<=this->network_NO; j++) {
             if (i!=j) {
-                NetPair np;
+                /*NetPair np;
                 np.net1=i;
                 np.net2=j;
-                double w1=netifmap[np];
+                double w1=netifmap[np];*/
                 
                 
                 std::set<int> nodenet1=netnodes[i];
@@ -135,6 +151,7 @@ void Graph::netinfGraph()
                         n1.net_id=i;
                         n2.node_id=*iter;
                         n2.net_id=j;
+                        double w1=iin[*iter];
                         if(w1>0)
                         {
                             edge.u=n1;

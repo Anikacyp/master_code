@@ -8,6 +8,7 @@
 #ifndef BASEOBJ__H
 #define BASEOBJ__H
 #include <vector>
+#include <set>
 
 struct NODE
 {

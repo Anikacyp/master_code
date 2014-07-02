@@ -24,6 +24,8 @@ private:
     
     std::vector<std::string> files;
     //edges stores the edges of the overall networks
+    std::map<int,double> iin;
+    
     static std::vector<EDGE> edges;
     
     //adjTable stores the adjacent table of a given node.!!!
@@ -48,6 +50,7 @@ public:
     void fileInput();
     void graphBuilding();
     void netinfGraph();
+    void nodeIntraInf();
     void adjacentTable(NODE n1,NODE n2, double w);
     void print();
     std::map<NODE, std::vector<ADJEDGE> > getAdjTable();

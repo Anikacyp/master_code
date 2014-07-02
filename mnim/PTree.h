@@ -11,9 +11,9 @@
 
 #include <iostream>
 #include "BaseObj.h"
-#Include <list>
+#include <list>
 
-struct TreeNode
+/*struct TreeNode
 {
     NODE node;
     TreeNode * parent;
@@ -26,7 +26,7 @@ struct TreeNode
     TreeNode(NODE cnode, TreeNode *){}
     void insertChild(Treenode &);
     void setParent(Treenode &);
-};
+};*/
 
 class PTree{
 private:
