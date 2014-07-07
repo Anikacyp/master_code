@@ -1,7 +1,7 @@
 cc=g++
 ccflags=-O3 -std=c++11
 exe=main
-obj=main.o Graph.o Model.o Seed.o Heap.o
+obj=main.o- Graph.o Model.o Seed.o Heap.o
 
 $(exe):$(obj)
 	$(cc) ${ccflags} -o $(exe) $(obj)

@@ -1,0 +1,102 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		845984F7196A3CC20065426C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		845984F9196A3CD50065426C /* Graph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Graph.cpp; sourceTree = "<group>"; };
+		845984FA196A3CD50065426C /* Graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
+		845984FB196A3CF00065426C /* Heap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Heap.cpp; sourceTree = "<group>"; };
+		845984FC196A3CF00065426C /* Heap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Heap.h; sourceTree = "<group>"; };
+		845984FE196A3D190065426C /* limit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = limit.h; sourceTree = "<group>"; };
+		845984FF196A3D360065426C /* Model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
+		84598500196A3D360065426C /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		84598501196A3D620065426C /* BaseLine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseLine.cpp; sourceTree = "<group>"; };
+		84598502196A3D620065426C /* BaseLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseLine.h; sourceTree = "<group>"; };
+		8497072C196A3DBE00529CAC /* makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
+		8497072D196A3DD200529CAC /* MonteCarlo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MonteCarlo.cpp; sourceTree = "<group>"; };
+		8497072E196A3DD200529CAC /* MonteCarlo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MonteCarlo.h; sourceTree = "<group>"; };
+		8497072F196A3E0B00529CAC /* n1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = n1.txt; sourceTree = "<group>"; };
+		84970730196A3E0B00529CAC /* n2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = n2.txt; sourceTree = "<group>"; };
+		84970733196A3E9200529CAC /* Objects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Objects.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		845984F0196A3CB90065426C = {
+			isa = PBXGroup;
+			children = (
+				84970733196A3E9200529CAC /* Objects.h */,
+				845984FF196A3D360065426C /* Model.cpp */,
+				84598500196A3D360065426C /* Model.h */,
+				84598501196A3D620065426C /* BaseLine.cpp */,
+				84598502196A3D620065426C /* BaseLine.h */,
+				8497072D196A3DD200529CAC /* MonteCarlo.cpp */,
+				8497072E196A3DD200529CAC /* MonteCarlo.h */,
+				845984F9196A3CD50065426C /* Graph.cpp */,
+				845984FA196A3CD50065426C /* Graph.h */,
+				845984FB196A3CF00065426C /* Heap.cpp */,
+				845984FC196A3CF00065426C /* Heap.h */,
+				845984FE196A3D190065426C /* limit.h */,
+				845984F7196A3CC20065426C /* main.cpp */,
+				8497072C196A3DBE00529CAC /* makefile */,
+				8497072F196A3E0B00529CAC /* n1.txt */,
+				84970730196A3E0B00529CAC /* n2.txt */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		845984F1196A3CB90065426C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = 845984F4196A3CB90065426C /* Build configuration list for PBXProject "imms" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 845984F0196A3CB90065426C;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		845984F5196A3CB90065426C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		845984F6196A3CB90065426C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		845984F4196A3CB90065426C /* Build configuration list for PBXProject "imms" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				845984F5196A3CB90065426C /* Debug */,
+				845984F6196A3CB90065426C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 845984F1196A3CB90065426C /* Project object */;
+}
