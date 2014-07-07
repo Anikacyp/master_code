@@ -9,6 +9,7 @@
 #include "Heap.h"
 Heap::Heap(){}
 Heap::~Heap(){}
+
 void Heap::heapSort(std::vector<HeapNode> & data)
 {
     this->size=data.size();
@@ -19,6 +20,7 @@ void Heap::heapSort(std::vector<HeapNode> & data)
         heapAdjust(data,0);
     }
 }
+
 
 void Heap::buildHeap(std::vector<HeapNode> & data)
 {
@@ -38,12 +40,7 @@ void Heap::heapAdjust(std::vector<HeapNode> & data, int pos)
         largest=l;
     if ((r<=data.size()) && (data[r].value>data[largest].value))
         largest=r;
-    /*if ((l<this->size) && (data[l]>data[pos])) {
-     largest=l;
-     }
-     if ((r<this->size) && (data[r]>data[largest])) {
-     largest=r;
-     }*/
+    
     if (largest!=pos)
     {
         swap(data,largest,pos);
@@ -58,7 +55,6 @@ void Heap::swap(std::vector<HeapNode> & data,int p1,int p2)
     tmpnode.node=data[p1].node;
     tmpnode.value=data[p1].value;
     tmpnode.status=data[p1].status;
-    //tmpnode=data[p1];
     data[p1]=data[p2];
     data[p2]=tmpnode;
     

@@ -66,11 +66,14 @@ void Model::MPP()
         tmppp.clear();
         tmppath.clear();
         tmpS.clear();
+        tmpids.clear();
 		
-        tmpS.insert(current_node);
+        //tmpS.insert(current_node);
         tmppp[current_node]=1.0;
         ADJ adj(current_node,1.0);
-        tmppath[current_node].push_back(adj);        
+        tmppath[current_node].push_back(adj);
+        
+        //tmpids.insert(node_id_map[current_node]);
         
         Dijkstra(current_node);
         
@@ -82,6 +85,9 @@ void Model::MPP()
 }
 void Model::Dijkstra(int id)
 {
+    tmpS.insert(current_node);
+    tmpids.insert(node_id_map[current_node]);
+    
     if (adjTable.count(id)) {
         double tv=0.0,tmv=0.0;
         int tmp_id=-1;
@@ -93,23 +99,61 @@ void Model::Dijkstra(int id)
             	tv=tmppp[id]*adjs[i].w;
             	if (tv>THETA)
                 {
-                    if ((!tmppp.count(adjs[i].u)) || (tmppp[adjs[i].u]<tv))
+                    /*if ((!tmppp.count(adjs[i].u)) || (tmppp[adjs[i].u]<tv))
+                        {
+                            
+                            tmppp[adjs[i].u]=tv;
+                            recordPath(id,adjs[i].u,adjs[i].w);
+                        }
+                        if (tmv<tv)
+                        {
+                            tmv=tv;
+                            tmp_id=adjs[i].u;
+                        }*/
+
+                    if (!tmppp.count(adjs[i].u))
                     {
-                        //std::cout<<adjs[i].u<<"\t"<<tv<<std::endl;
-                        tmppp[adjs[i].u]=tv;
-                        recordPath(id,adjs[i].u,adjs[i].w);
-                    }
-                    if (tmv<tv)
+                        if (tmpids.count(node_id_map[adjs[i].u])) {
+                            if (node_id_map[id]!=node_id_map[adjs[i].u]) {
+                                tv*=weakCoeff[node_id_map[adjs[i].u]];
+                            }
+                        }
+                        if (tv>THETA) {
+                            tmppp[adjs[i].u]=tv;
+                            recordPath(id,adjs[i].u,adjs[i].w);
+                        }
+                    }else
                     {
-                        tmv=tv;
-                        tmp_id=adjs[i].u;
+                        if (tmpids.count(node_id_map[adjs[i].u])) {
+                            if (node_id_map[id]!=node_id_map[adjs[i].u]) {
+                                tv*=weakCoeff[node_id_map[adjs[i].u]];
+                            }
+                        }
+                        if (tv>THETA && tmppp[adjs[i].u]<tv) {
+                            tmppp[adjs[i].u]=tv;
+                            recordPath(id,adjs[i].u,adjs[i].w);
+                        }
                     }
+                    
             	}
             }
         }
+        //choose the next immediate point
+        std::map<int,double>::iterator iter=tmppp.begin();
+        while (iter!=tmppp.end()) {
+            if (!tmpS.count(iter->first)) {
+                if (tmv<iter->second) {
+                    tmv=iter->second;
+                    tmp_id=iter->first;
+                }
+            }
+            iter++;
+        }
+        //recursive call
     	if (tmp_id!=-1)
         {
             tmpS.insert(tmp_id);
+            tmpids.insert(node_id_map[tmp_id]);
             Dijkstra(tmp_id);
         }else
             return;

@@ -27,4 +27,10 @@ struct ADJ
     ADJ(){}
 };
 
+struct HeapNode{
+    int node;
+    int status;
+    double value;
+};
+
 #endif /* defined(__imms__Objects__) */

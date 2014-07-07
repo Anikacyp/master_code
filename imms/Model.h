@@ -31,11 +31,11 @@ private:
     
     //tmp vairables
     std::set<int>tat;
-    
     int current_node;
     std::map<int,double> tmppp;
     std::map<int,std::vector<ADJ> >tmppath;
     std::set<int> tmpS;
+    std::set<int> tmpids;
     
     //result variables
     std::map<int,std::map<int,double> > miv;

@@ -12,4 +12,5 @@ int main(int argc,char * argv[])
     Model *model=new Model();
     
     delete model;
+    return 1;
 }
