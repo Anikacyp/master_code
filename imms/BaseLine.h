@@ -31,5 +31,6 @@ public:
     ~BaseLine();
     void run();
     int nextSeed();
+    void greedyCELF();
 };
 #endif /* defined(__imms__BaseLine__) */

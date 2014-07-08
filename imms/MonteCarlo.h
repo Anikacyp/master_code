@@ -15,7 +15,7 @@
 #include <map>
 #include "Objects.h"
 #include "Graph.h"
-
+#include <stdlib.h>
 class MonteCarlo
 {
 private:

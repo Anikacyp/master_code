@@ -78,7 +78,7 @@ bool MonteCarlo::isActivated(int s,int t,double weight)
     {
         int sid=node_id_map[s];
         int tid=node_id_map[t];
-        double randval=(double)std::rand()/(double)RAND_MAX;
+        double randval=(double)rand()/(double)RAND_MAX;
         if (active_ids.count(tid)) {
             if (tid==sid)
             {

@@ -10,6 +10,7 @@
 #define __imms__Objects__
 
 #include <iostream>
+#include <vector>
 
 struct Edge
 {
@@ -33,4 +34,11 @@ struct HeapNode{
     double value;
 };
 
+struct TreeNode
+{
+    int node;
+    std::vector<int> children;
+    int parent;
+    double weight;
+};
 #endif /* defined(__imms__Objects__) */

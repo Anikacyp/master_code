@@ -16,10 +16,10 @@
 #include <fstream>
 #include <vector>
 #include "Objects.h"
-
+#include "stdlib.h"
 class Graph{
 private:
-    bool built=false;
+     bool built;
     std::vector<std::string> files;
     
     //this map store node and its corresponding id;

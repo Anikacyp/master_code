@@ -46,6 +46,11 @@ int BaseLine::nextSeed()
         }
         iter++;
     }
-    //std::cout<<seeds.size()<<"\t"<<nexe_seed_id<<"\t"<<value<<std::endl;
     return nexe_seed_id;
+}
+
+
+void BaseLine::greedyCELF()
+{
+    
 }

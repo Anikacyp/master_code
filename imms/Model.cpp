@@ -31,8 +31,8 @@ void Model::setVariables(Graph *graph)
 
 int randomNum(int range)
 {
-    std::srand(unsigned(time(0)));
-    return std::rand()%range;
+    srand(unsigned(time(0)));
+    return rand()%range;
 }
 
 void Model::traversal()

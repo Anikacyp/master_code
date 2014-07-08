@@ -7,7 +7,9 @@
 //
 
 #include "Graph.h"
-Graph::Graph(){}
+Graph::Graph(){
+built=false;
+}
 
 Graph::~Graph(){}
 
@@ -123,13 +125,13 @@ void Graph::buildGraph()
 
 void Graph::weakCoefficient()
 {
-    std::srand(unsigned(time(0)));
+    srand(unsigned(time(0)));
     double tval=0.0;
     std::map<int,std::set<int> >::iterator iter=node_set_map.begin();
     while (iter!=node_set_map.end()) {
         //该随机数是节点已被激活后，其他网络中该点被激活的弱化系数
-        tval=std::rand()/(double)(RAND_MAX);
-        weakCoeff[iter->first]=tval;
+        tval=rand()/(double)(RAND_MAX);
+		weakCoeff[iter->first]=tval;
         
         //该随机数表示网络中节点本身之间的激活系数
         //tval=std::rand()/(double)(RAND_MAX);
@@ -146,7 +148,7 @@ void Graph::adjacentTable(int u,int v,double w)
 
 void Graph::nodeintGraph()
 {
-    std::srand(unsigned(time(0)));
+    srand(unsigned(time(0)));
     std::vector<int> tmpvec;
     std::map<int,double>::iterator iter=weakCoeff.begin();
     while (iter!=weakCoeff.end()) {
@@ -161,7 +163,7 @@ void Graph::nodeintGraph()
         for (int i=0; i<tmpvec.size(); i++) {
             for (int j=0; j<tmpvec.size(); j++) {
                 if (i!=j) {
-                    double tval=std::rand()/(double)(RAND_MAX);
+                    double tval=rand()/(double)(RAND_MAX);
                     adjacentTable(tmpvec[i],tmpvec[j],tval);
                 }
             }
