@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-#define SEED_SIZE 10
+#define SEED_SIZE 3
 #define THETA 0.5
 #define NUM_ITER 2000
 

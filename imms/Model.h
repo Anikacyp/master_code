@@ -42,6 +42,7 @@ private:
     std::map<int,std::map<int,std::vector<ADJ> > >mip;
     
 public:
+    Model(Graph *graph);
     Model();
     ~Model();
     void traversal();
@@ -50,7 +51,7 @@ public:
     void MPP();
     void Dijkstra(int id);
     int randomNum(int range);
-    
+    void setVariables(Graph *graph);
     void print();
 };
 

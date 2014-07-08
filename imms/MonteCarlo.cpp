@@ -8,22 +8,33 @@
 
 #include "MonteCarlo.h"
 MonteCarlo::MonteCarlo(){}
+
+MonteCarlo::MonteCarlo(Graph *graph)
+{
+    setVariables(graph);
+}
 MonteCarlo::~MonteCarlo(){}
 
-void MonteCarlo::init(std::set<int> seed)
+void MonteCarlo::setVariables(Graph *graph)
 {
-    std::set<int>::iterator iter_seed=seed.begin();
-    while (iter_seed!=seed.end()) {
-        seedvec.push_back(*iter_seed);
-        active_nodes.insert(*iter_seed);
-        active_ids.insert(node_id_map[*iter_seed]);
-        iter_seed++;
+	this->node_id_map=graph->getNodeIdMap();
+    this->adjTable=graph->getAdjTable();
+    this->weakCoeff=graph->getWeakCoeff();
+}
+
+void MonteCarlo::init(std::vector<int> seed)
+{
+    seedvec=seed;
+    for (int i=0; i<seed.size(); i++) {
+        active_ids.insert(node_id_map[seed[i]]);
+        active_nodes.insert(seed[i]);
     }
 }
 
 
-double MonteCarlo::simulation(int num_iter,std::set<int> seed)
+double MonteCarlo::simulation(int num_iter,std::vector<int> seed)
 {
+    //std::cout<<"starting simulation!"<<std::endl;
     int resultSize=0;
     
     for (int i=0; i<num_iter; i++)
@@ -45,6 +56,7 @@ double MonteCarlo::simulation(int num_iter,std::set<int> seed)
                 if (isActivated(seedvec[h],adjs[i].u,adjs[i].w))
                 {
                 	active_nodes.insert(adjs[i].u);
+                    active_ids.insert(node_id_map[adjs[i].u]);
                     seedvec.push_back(adjs[i].u);
                     t++;
                     resultSize++;
@@ -53,35 +65,36 @@ double MonteCarlo::simulation(int num_iter,std::set<int> seed)
             h++;
         }
     }
+    double value=(double)resultSize/(double)num_iter;
+    std::cout<<"spread value: "<<value<<std::endl;
     return (double)resultSize/(double)num_iter;
 }
 
 bool MonteCarlo::isActivated(int s,int t,double weight)
 {
-    if (active_nodes.count(id)) {
+    if (active_nodes.count(t)) {
         return false;
     }else
     {
-        int tid=node_id_map[t];
         int sid=node_id_map[s];
-        double randval=(double)std::rand()/(double)std::RAND_MAX;
+        int tid=node_id_map[t];
+        double randval=(double)std::rand()/(double)RAND_MAX;
         if (active_ids.count(tid)) {
             if (tid==sid)
             {
-                if (randval<weight) {
+                if (randval<weight)
                     return true;
-                }
             }else
             {
-                if (randval<weight*weakCoeff[tid]) {
+                if (randval<weight*weakCoeff[tid])
                     return true;
-                }
             }
         }else
         {
-            if (randval<weight) {
+            if (randval<weight)
                 return true;
-            }
         }
     }
+    return false;
 }
+

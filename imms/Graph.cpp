@@ -118,6 +118,7 @@ void Graph::buildGraph()
         iter1++;
     }*/
     
+    built=true;
 }
 
 void Graph::weakCoefficient()
@@ -193,5 +194,9 @@ std::map<int,std::vector<ADJ> > Graph::getAdjTable()
 std::vector<Edge> Graph::getEdges()
 {
     return Edges;
+}
+bool Graph::isBuilt()
+{
+    return built;
 }
 

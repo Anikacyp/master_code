@@ -6,11 +6,17 @@
 //
 //
 
+#include "Graph.h"
 #include "Model.h"
+#include "BaseLine.h"
+
 int main(int argc,char * argv[])
 {
-    Model *model=new Model();
-    
-    delete model;
+	Graph * graph=new Graph();
+    graph->buildGraph();
+    BaseLine *baseline=new BaseLine(graph);
+    baseline->run();
+    delete baseline;
+    delete graph;
     return 1;
 }

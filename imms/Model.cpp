@@ -8,20 +8,26 @@
 
 #include "Model.h"
 
-Model::Model()
+Model::Model(Graph *graph)
 {
-	Graph *graph=new Graph();
-    graph->buildGraph();
+    setVariables(graph);
+    MPP();
+    print();
+}
+Model::Model(){}
+Model::~Model(){}
+
+void Model::setVariables(Graph *graph)
+{
+    if (!graph->isBuilt()) {
+        graph->buildGraph();
+    }
     this->node_id_map=graph->getNodeIdMap();
     this->node_net_map=graph->getNodeNetMap();
     this->node_set_map=graph->getNodeSetMap();
     this->weakCoeff=graph->getWeakCoeff();
     this->adjTable=graph->getAdjTable();
-    delete graph;
-    MPP();
-    print();
 }
-Model::~Model(){}
 
 int randomNum(int range)
 {

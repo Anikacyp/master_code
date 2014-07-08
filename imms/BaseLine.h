@@ -10,14 +10,24 @@
 #define __imms__BaseLine__
 
 #include <iostream>
+#include <set>
+#include <map>
+#include <vector>
 #include "limit.h"
 #include "MonteCarlo.h"
 
 //baseLine means the greedy algorithm
 class BaseLine
 {
+private:
+    std::map<int,int> node_id_map;
+    MonteCarlo *mc;
+    
+    //tmp variables;
+    std::vector<int> seeds;
+    std::set<int> seedset;
 public:
-    BaseLine();
+    BaseLine(Graph *graph);
     ~BaseLine();
     void run();
     int nextSeed();

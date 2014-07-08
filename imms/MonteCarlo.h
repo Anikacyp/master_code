@@ -14,6 +14,7 @@
 #include <vector>
 #include <map>
 #include "Objects.h"
+#include "Graph.h"
 
 class MonteCarlo
 {
@@ -27,10 +28,16 @@ private:
     std::set<int> active_ids;
     std::vector<int> seedvec;
 public:
+    MonteCarlo(Graph *graph);
     MonteCarlo();
     ~MonteCarlo();
-    void init(std::set<int> seed);
-    double simulation(int num_iter, std::set<int> seed);
+    void init(std::vector<int> seed);
+    double simulation(int num_iter, std::vector<int> seed);
     bool isActivated(int sid,int did,double weight);
+    void setVariables(Graph *graph);
+    //void setAdjTable(std::map<int,std::vector<ADJ> >adt);
+    //void setNodeIdMap(std::map<int,int> nim);
+    //void setWeakCoeff(std::map<int,double> wc);
+    
 };
 #endif /* defined(__imms__MonteCarlo__) */

@@ -19,6 +19,7 @@
 
 class Graph{
 private:
+    bool built=false;
     std::vector<std::string> files;
     
     //this map store node and its corresponding id;
@@ -30,11 +31,6 @@ private:
     
     //nii record the influence between the same node.
     std::map<int,double> weakCoeff;
-    /**
-     naive record the influence between the same nodes,
-     that is when a node has been actived, then how the influence it has on the same node in other network.
-     */
-    //std::map<int,double> naive;
     
     std::map<int,std::vector<ADJ> > adjTable;
     std::vector<Edge> Edges;
@@ -46,7 +42,7 @@ public:
     void adjacentTable(int u,int v,double w);
     void weakCoefficient();
     void nodeintGraph();
-    
+    bool isBuilt();
     //return variables
     std::map<int,int> getNodeIdMap();
     std::map<int,int> getNodeNetMap();
