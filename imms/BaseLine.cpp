@@ -13,6 +13,10 @@ BaseLine::~BaseLine(){}
 
 void BaseLine::run()
 {
+    double value = 0.0;
+    std::vector<double> improve;
+    std::vector<int> seeds;
+    std::set<int> seedset;
     for (int i=0; i<SEED_SIZE; i++) {
         int seed=nextSeed();
     }
@@ -21,5 +25,6 @@ void BaseLine::run()
 
 int BaseLine::nextSeed()
 {
+    
     return 1;
 }

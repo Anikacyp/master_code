@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include "limit.h"
+#include "MonteCarlo.h"
 
 //baseLine means the greedy algorithm
 class BaseLine

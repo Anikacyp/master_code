@@ -12,7 +12,7 @@
 #include <iostream>
 
 #define SEED_SIZE 10
-#define THETA 0.0
+#define THETA 0.5
 #define NUM_ITER 2000
 
 #endif /* defined(__imms__limit__) */
