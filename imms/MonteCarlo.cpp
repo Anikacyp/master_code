@@ -65,8 +65,8 @@ double MonteCarlo::simulation(int num_iter,std::vector<int> seed)
             h++;
         }
     }
-    double value=(double)resultSize/(double)num_iter;
-    std::cout<<"spread value: "<<value<<std::endl;
+    //double value=(double)resultSize/(double)num_iter;
+    //std::cout<<"spread value: "<<value<<std::endl;
     return (double)resultSize/(double)num_iter;
 }
 

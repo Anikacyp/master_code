@@ -25,6 +25,7 @@ private:
     
     //tmp variables;
     std::vector<int> seeds;
+    //std::vector<double> spread;
     std::set<int> seedset;
 public:
     BaseLine(Graph *graph);

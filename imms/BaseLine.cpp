@@ -21,7 +21,7 @@ void BaseLine::run()
 {
     for(int i=0; i<SEED_SIZE; i++) {
         int seed=nextSeed();
-        std::cout<<"seed "<<i+1<<" is "<<seed<<std::endl;
+        //std::cout<<"seed "<<i+1<<" is "<<seed<<std::endl;
         seeds.push_back(seed);
         seedset.insert(seed);
     }
@@ -46,10 +46,11 @@ int BaseLine::nextSeed()
         }
         iter++;
     }
+    std::cout<<"spread value: "<<value<<std::endl;
     return nexe_seed_id;
 }
 
-
+//improved greedy algorithm
 void BaseLine::greedyCELF()
 {
     
