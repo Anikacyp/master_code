@@ -10,9 +10,11 @@
 #define __imms__Seed__
 
 #include <iostream>
+#include <fstream>
 #include "Graph.h"
 #include "BaseLine.h"
-#include <fstream>
+#include "Model.h"
+#include "ppTree.h"
 
 class Seed
 {

@@ -13,9 +13,11 @@
 #include <set>
 #include <vector>
 #include <map>
+#include <stdlib.h>
 #include "Objects.h"
 #include "Graph.h"
-#include <stdlib.h>
+
+
 class MonteCarlo
 {
 private:

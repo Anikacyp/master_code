@@ -56,7 +56,7 @@ double MonteCarlo::simulation(int num_iter,std::vector<int> seed)
                 if (isActivated(seedvec[h],adjs[i].u,adjs[i].w))
                 {
                 	active_nodes.insert(adjs[i].u);
-                    active_ids.insert(node_id_map[adjs[i].u]);
+                    //active_ids.insert(node_id_map[adjs[i].u]);
                     seedvec.push_back(adjs[i].u);
                     t++;
                     resultSize++;
@@ -86,13 +86,16 @@ bool MonteCarlo::isActivated(int s,int t,double weight)
                     return true;
             }else
             {
-                if (randval<weight*weakCoeff[tid])
+                if (randval<(weight*weakCoeff[tid]))
                     return true;
             }
         }else
         {
             if (randval<weight)
+            {
+                active_ids.insert(tid);
                 return true;
+            }
         }
     }
     return false;

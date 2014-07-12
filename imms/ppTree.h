@@ -10,5 +10,26 @@
 #define __imms__ppTree__
 
 #include <iostream>
+#include <vector>
+#include <map>
+#include "Model.h"
+#include "Objects.h"
+
+
+class ppTree
+{
+private:
+    std::map<int,double> nodeSpread;
+    std::map<int,std::map<int,double> > miv;
+    std::map<int,std::map<int,std::vector<ADJ> > >mip;
+    std::map<int,TreeNode> mia;
+    std::map<int,TreeNode> moa;
+public:
+    ppTree();
+    ppTree(Model *model);
+    ~ppTree();
+    void buildTree();
+    void setVariables(Model *model);
+};
 
 #endif /* defined(__imms__ppTree__) */

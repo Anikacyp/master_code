@@ -10,6 +10,8 @@
 
 Seed::Seed(){
 	graph=new Graph();
+    graph->buildGraph();
+    setVariables();
 }
 Seed::~Seed(){
 	delete graph;
@@ -31,7 +33,11 @@ void Seed::run(int mode)
     }
     //propagation tree method
     if (mode==2) {
-        
+        Model *model=new Model(graph);
+        ppTree *ptree=new ppTree(model);
+       	
+        delete ptree;
+    	delete model;
     }
     //the maximum propagation path method
     if (mode==3) {

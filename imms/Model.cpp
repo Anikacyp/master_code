@@ -144,7 +144,7 @@ void Model::Dijkstra(int id)
             	}
             }
         }
-        //choose the next immediate point
+        //choose the next intermediate point
         std::map<int,double>::iterator iter=tmppp.begin();
         while (iter!=tmppp.end()) {
             if (!tmpS.count(iter->first)) {
@@ -173,6 +173,15 @@ void Model::recordPath(int source,int dest, double w)
     std::vector<ADJ> adjs=tmppath[source];
     adjs.push_back(adj);
     tmppath[dest]=adjs;
+}
+
+std::map<int,std::map<int,double> > Model::getMiv()
+{
+    return this->miv;
+}
+std::map<int,std::map<int,std::vector<ADJ> > > Model::getMip()
+{
+    return this->mip;
 }
 
 void Model::print(){

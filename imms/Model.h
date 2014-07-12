@@ -10,14 +10,14 @@
 #define __imms__Model__
 
 #include <iostream>
-#include "Graph.h"
-#include "Objects.h"
-#include "limit.h"
 #include <vector>
 #include <set>
 #include <map>
 #include <iostream>
 #include <stdlib.h>
+#include "Graph.h"
+#include "Objects.h"
+#include "limit.h"
 
 class Model
 {
@@ -53,6 +53,8 @@ public:
     int randomNum(int range);
     void setVariables(Graph *graph);
     void print();
+    std::map<int,std::map<int,double> > getMiv();
+    std::map<int,std::map<int,std::vector<ADJ> > > getMip();
 };
 
 #endif /* defined(__imms__Model__) */

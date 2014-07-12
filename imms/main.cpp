@@ -6,17 +6,14 @@
 //
 //
 
-#include "Graph.h"
-#include "Model.h"
-#include "BaseLine.h"
-
+#include "Seed.h"
 int main(int argc,char * argv[])
 {
-	Graph * graph=new Graph();
-    graph->buildGraph();
-    BaseLine *baseline=new BaseLine(graph);
-    baseline->run();
-    delete baseline;
-    delete graph;
+    Seed *seed=new Seed();
+    int mode;
+    std::cout<<"choose mode:\n1 means greedy algorithm\n2 means the maximum propagation path"<<std::endl;
+    std::cin>>mode;
+    seed->run(mode);
+    delete seed;
     return 1;
 }

@@ -1,7 +1,7 @@
 cc=g++
 ccflags=-O3
 exe=main
-objs=main.o Graph.o Model.o Heap.o BaseLine.o MonteCarlo.o Seed.o
+objs=main.o Graph.o Model.o Heap.o BaseLine.o MonteCarlo.o Seed.o ppTree.o
 $(exe):$(objs)
 	$(cc) ${ccflags} -o $(exe) $(objs)
 main.o: main.cpp Model.h Graph.h BaseLine.h
@@ -18,7 +18,9 @@ MonteCarlo.o: MonteCarlo.cpp MonteCarlo.h Objects.h Graph.h
 	$(cc) ${ccflags} -c MonteCarlo.cpp
 Seed.o: Seed.cpp Seed.h Graph.h BaseLine.h
 	$(cc) ${ccflags} -c Seed.cpp
-    
+ppTree.o: ppTree.cpp ppTree.h Model.h Objects.h
+	$(cc) ${ccflags} -c ppTree.cpp
+
 .PYTHON:clean
 clean:
 	-rm -fr *.o
