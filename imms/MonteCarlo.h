@@ -23,9 +23,12 @@ class MonteCarlo
 private:
     std::map<int,std::vector<ADJ> > adjTable;
     std::map<int,int> node_id_map;
-    std::map<int,double> weakCoeff;
+    //std::map<int,double> weakCoeff;
     
     //tmp variables
+    std::set<int> active_nodes_tmp;
+    std::set<int> active_ids_tmp;
+    std::vector<int> seedvec_tmp;
     std::set<int> active_nodes;
     std::set<int> active_ids;
     std::vector<int> seedvec;
@@ -37,9 +40,5 @@ public:
     double simulation(int num_iter, std::vector<int> seed);
     bool isActivated(int sid,int did,double weight);
     void setVariables(Graph *graph);
-    //void setAdjTable(std::map<int,std::vector<ADJ> >adt);
-    //void setNodeIdMap(std::map<int,int> nim);
-    //void setWeakCoeff(std::map<int,double> wc);
-    
 };
 #endif /* defined(__imms__MonteCarlo__) */

@@ -37,6 +37,7 @@ private:
     std::map<int,std::vector<ADJ> > adjTable;
     std::vector<Edge> Edges;
 public:
+    Graph(std::vector<std::string> files);
     Graph();
     ~Graph();
     void fileInput();

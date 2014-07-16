@@ -25,6 +25,7 @@ private:
     
     //tmp variables;
     std::vector<int> seeds;
+    std::vector<double> spreads;
     //std::vector<double> spread;
     std::set<int> seedset;
 public:
@@ -33,5 +34,7 @@ public:
     void run();
     int nextSeed();
     void greedyCELF();
+    std::vector<int> getSeed();
+    std::vector<double> getSpread();
 };
 #endif /* defined(__imms__BaseLine__) */

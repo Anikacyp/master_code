@@ -8,10 +8,12 @@
 
 #include "Seed.h"
 
-Seed::Seed(){
-	graph=new Graph();
+Seed::Seed(std::vector<std::string> files){
+	graph=new Graph(files);
     graph->buildGraph();
     setVariables();
+    //std::map<int,int>::iterator iter=this->node_id_map.begin();
+    //std::cout<<"total node number: "<<this->node_id_map.size()<<std::endl;
 }
 Seed::~Seed(){
 	delete graph;
@@ -29,6 +31,8 @@ void Seed::run(int mode)
     	BaseLine *baseline=new BaseLine(graph);
         baseline->run();
         //return results
+        this->seeds=baseline->getSeed();
+        this->spreads=baseline->getSpread();
         delete baseline;
     }
     //propagation tree method
@@ -41,31 +45,28 @@ void Seed::run(int mode)
     }
     //the maximum propagation path method
     if (mode==3) {
-        
     }
-    else
-        return;
+    writeToFile(mode);
 }
 
 void Seed::writeToFile(int mode)
 {
     std::string fname;
  	if (mode==1){
-        fname="greedy";
+        fname="greedy.txt";
     }
     if (mode==2){
-        fname="ptree";
+        fname="ptree.txt";
     }
     if (mode==3){
-        fname="mip";
+        fname="mip.txt";
     }
-    else
-        return;
+    std::cout<<fname<<std::endl;
     std::ofstream ofile;
     ofile.open(fname.c_str());
     if (ofile) {
         for (int i=0; i<seeds.size(); i++) {
-            ofile<<seeds[i]<<"\n";
+            ofile<<seeds[i]<<"\t"<<node_id_map[seeds[i]]<<"\t"<<node_net_map[seeds[i]]<<"\t"<<spreads[i]<<"\n";
         }
     }else
     {

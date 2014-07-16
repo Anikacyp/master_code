@@ -7,8 +7,14 @@
 //
 
 #include "Graph.h"
+Graph::Graph(std::vector<std::string> files){
+    this->files=files;
+	built=false;
+}
+
 Graph::Graph(){
-built=false;
+	this->built=false;
+    fileInput();
 }
 
 Graph::~Graph(){}
@@ -28,7 +34,7 @@ void Graph::fileInput()
 
 void Graph::buildGraph()
 {
-    fileInput();
+    //fileInput();
     std::map<int,int> tmp_map;
     std::ifstream ifile;
     int nu,nv,tmp_nu,tmp_nv;
@@ -41,17 +47,18 @@ void Graph::buildGraph()
             while(!ifile.eof())
             {
                 ifile>>nu>>nv>>w1>>w2;
+                tmp_nu=nu;
+                tmp_nv=nv;
                 if (!tmp_map.count(nu))
                 {
                     if (node_id_map.count(nu))
                     {
                         tmp_nu=node_id_map.size()+1;
-                        node_id_map[tmp_nu]=nu;
                     }else
                     {
                         tmp_nu=nu;
-                    	node_id_map[tmp_nu]=nu;
                     }
+                    node_id_map[tmp_nu]=nu;
                     tmp_map[nu]=tmp_nu;
                     node_net_map[tmp_nu]=i+1;
                     node_set_map[nu].insert(tmp_nu);
@@ -59,7 +66,6 @@ void Graph::buildGraph()
                 else
                 {
                     tmp_nu=tmp_map[nu];
-                
                 }
                 
                 if (!tmp_map.count(nv))
@@ -67,12 +73,11 @@ void Graph::buildGraph()
                     if (node_id_map.count(nv))
                     {
                         tmp_nv=node_id_map.size()+1;
-                        node_id_map[tmp_nv]=nv;
                     }else
                     {
                         tmp_nv=nv;
-                        node_id_map[tmp_nv]=nv;
                     }
+                    node_id_map[tmp_nv]=nv;
                     tmp_map[nv]=tmp_nv;
                     node_net_map[tmp_nv]=i+1;
                     node_set_map[nv].insert(tmp_nv);
@@ -80,6 +85,7 @@ void Graph::buildGraph()
                 {
                 	tmp_nv=tmp_map[nv];
                 }
+                
                 Edge edge(tmp_nu,tmp_nv,w1);
                 Edges.push_back(edge);
                 edge.u=tmp_nv;
@@ -87,13 +93,19 @@ void Graph::buildGraph()
                 edge.pp=w2;
                 Edges.push_back(edge);
                 //std::cout<<tmp_nu<<"\t"<<tmp_nv<<"\t"<<w1<<"\t"<<w2<<std::endl;
-                adjacentTable(tmp_nu,tmp_nv,w1);
-                adjacentTable(tmp_nv,tmp_nu,w2);
+                if (w1>0) {
+                    adjacentTable(tmp_nu,tmp_nv,w1);
+                }
+                if (w2>0) {
+                    adjacentTable(tmp_nv,tmp_nu,w2);
+                }
+                //adjacentTable(tmp_nu,tmp_nv,w1);
+                //adjacentTable(tmp_nv,tmp_nu,w2);
             }
         }
         ifile.close();
     }
-    weakCoefficient();
+    //weakCoefficient();
     nodeintGraph();
 	/*std::map<int,int>::iterator iter=node_id_map.begin();
 	while (iter!=node_id_map.end()) {
@@ -119,8 +131,18 @@ void Graph::buildGraph()
         std::cout<<std::endl;
         iter1++;
     }*/
+    /*std::map<int,std::vector<ADJ> >::iterator iter=adjTable.begin();
+    while (iter!=adjTable.end()) {
+        std::vector<ADJ> ads=iter->second;
+        for (int i=0; i<ads.size(); i++) {
+            std::cout<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<"\t"<<node_id_map[ads[i].u]<<"_"<<node_net_map[ads[i].u]<<"\t"<<ads[i].w<<std::endl;
+        }
+        iter++;
+    }*/
     
     built=true;
+    std::cout<<"node_set_map size: \t"<<node_set_map.size()<<std::endl;
+    std::cout<<"node_id_map size: \t"<<node_id_map.size()<<std::endl;
 }
 
 void Graph::weakCoefficient()
@@ -140,21 +162,15 @@ void Graph::weakCoefficient()
     }
 }
 
-void Graph::adjacentTable(int u,int v,double w)
-{
-    ADJ adj(v,w);
-    adjTable[u].push_back(adj);
-}
-
 void Graph::nodeintGraph()
 {
     srand(unsigned(time(0)));
     std::vector<int> tmpvec;
-    std::map<int,double>::iterator iter=weakCoeff.begin();
-    while (iter!=weakCoeff.end()) {
+    std::map<int,std::set<int> >::iterator iter=node_set_map.begin();
+    while (iter!=node_set_map.end()) {
         tmpvec.clear();
         int id=iter->first;
-        std::set<int> nodes=node_set_map[id];
+        std::set<int> nodes=iter->second;
         std::set<int>::iterator iter1=nodes.begin();
         while (iter1!=nodes.end()) {
             tmpvec.push_back(*iter1);
@@ -170,6 +186,12 @@ void Graph::nodeintGraph()
         }
         iter++;
     }
+}
+
+void Graph::adjacentTable(int u,int v,double w)
+{
+    ADJ adj(v,w);
+    adjTable[u].push_back(adj);
 }
 
 
