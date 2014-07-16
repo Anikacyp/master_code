@@ -38,9 +38,10 @@ void Seed::run(int mode)
     //propagation tree method
     if (mode==2) {
         Model *model=new Model(graph);
-        ppTree *ptree=new ppTree(model);
+        model->traversal(2);
+        //ppTree *ptree=new ppTree(model);
        	
-        delete ptree;
+        //delete ptree;
     	delete model;
     }
     //the maximum propagation path method
@@ -56,10 +57,10 @@ void Seed::writeToFile(int mode)
         fname="greedy.txt";
     }
     if (mode==2){
-        fname="ptree.txt";
+        fname="mip.txt";
     }
     if (mode==3){
-        fname="mip.txt";
+        fname="other.txt";
     }
     std::cout<<fname<<std::endl;
     std::ofstream ofile;

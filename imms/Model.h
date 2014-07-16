@@ -26,7 +26,7 @@ private:
     std::map<int,int> node_id_map;
     std::map<int,int> node_net_map;
     std::map<int,std::set<int> > node_set_map;
-    std::map<int,double> weakCoeff;
+    //std::map<int,double> weakCoeff;
     std::map<int,std::vector<ADJ> > adjTable;
     
     //tmp vairables
@@ -45,8 +45,8 @@ public:
     Model(Graph *graph);
     Model();
     ~Model();
-    void traversal();
-    void spread(int node);
+    void traversal(int type);
+    //void spread(int node);
     void recordPath(int source,int dest,double w);
     void MPP();
     void Dijkstra(int id);

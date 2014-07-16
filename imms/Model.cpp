@@ -11,8 +11,6 @@
 Model::Model(Graph *graph)
 {
     setVariables(graph);
-    MPP();
-    print();
 }
 Model::Model(){}
 Model::~Model(){}
@@ -25,7 +23,7 @@ void Model::setVariables(Graph *graph)
     this->node_id_map=graph->getNodeIdMap();
     this->node_net_map=graph->getNodeNetMap();
     this->node_set_map=graph->getNodeSetMap();
-    this->weakCoeff=graph->getWeakCoeff();
+    //this->weakCoeff=graph->getWeakCoeff();
     this->adjTable=graph->getAdjTable();
 }
 
@@ -35,14 +33,14 @@ int randomNum(int range)
     return rand()%range;
 }
 
-void Model::traversal()
+void Model::traversal(int type)
 {
-    std::map<int,int>::iterator iter=this->node_id_map.begin();
+    /*std::map<int,int>::iterator iter=this->node_id_map.begin();
     while (iter!=node_id_map.end()) {
         spread(iter->first);
         iter++;
     }
-    /*std::map<int,std::vector<ADJ> >::iterator iter=adjTable.begin();
+    std::map<int,std::vector<ADJ> >::iterator iter=adjTable.begin();
      while (iter!=adjTable.end()) {
      std::cout<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<":"<<std::endl;
      std::vector<ADJ> adjs=iter->second;
@@ -52,15 +50,13 @@ void Model::traversal()
      std::cout<<"-------------------"<<std::endl;
      iter++;
      }*/
+    
+    if(type==2)
+    {
+        MPP();
+        print();
+    }
 }
-
-
-//hop-based influence calculation
-void Model::spread(int node)
-{
-   
-}
-
 
 void Model::MPP()
 {
@@ -89,6 +85,7 @@ void Model::MPP()
         iter++;
     }
 }
+
 void Model::Dijkstra(int id)
 {
     tmpS.insert(current_node);
@@ -105,17 +102,72 @@ void Model::Dijkstra(int id)
             	tv=tmppp[id]*adjs[i].w;
             	if (tv>THETA)
                 {
-                    /*if ((!tmppp.count(adjs[i].u)) || (tmppp[adjs[i].u]<tv))
-                        {
-                            
+                    if (!tmppp.count(adjs[i].u))
+                    {
+                        tmppp[adjs[i].u]=tv;
+                        recordPath(id,adjs[i].u,adjs[i].w);
+                    }else
+                    {
+                        if (tmppp[adjs[i].u]<tv) {
                             tmppp[adjs[i].u]=tv;
                             recordPath(id,adjs[i].u,adjs[i].w);
                         }
-                        if (tmv<tv)
-                        {
-                            tmv=tv;
-                            tmp_id=adjs[i].u;
-                        }*/
+                    }
+            	}
+            }
+        }
+        //choose the next intermediate point
+        std::map<int,double>::iterator iter=tmppp.begin();
+        while (iter!=tmppp.end()) {
+            if (!tmpS.count(iter->first)) {
+                if (tmv<iter->second) {
+                    tmv=iter->second;
+                    tmp_id=iter->first;
+                }
+            }
+            iter++;
+        }
+        //recursive call
+    	if (tmp_id!=-1)
+        {
+            tmpS.insert(tmp_id);
+            tmpids.insert(node_id_map[tmp_id]);
+            Dijkstra(tmp_id);
+        }else
+            return;
+        
+    }
+}
+
+//使用弱化系数计算的最大传播路径
+/*
+void Model::Dijkstra(int id)
+{
+    tmpS.insert(current_node);
+    tmpids.insert(node_id_map[current_node]);
+    
+    if (adjTable.count(id)) {
+        double tv=0.0,tmv=0.0;
+        int tmp_id=-1;
+        std::vector<ADJ> adjs=adjTable[id];
+        for(int i=0;i<adjs.size();i++)
+        {
+            if (!tmpS.count(adjs[i].u))
+            {
+            	tv=tmppp[id]*adjs[i].w;
+            	if (tv>THETA)
+                {
+                    //if ((!tmppp.count(adjs[i].u)) || (tmppp[adjs[i].u]<tv))
+                    //    {
+                    //
+                    //        tmppp[adjs[i].u]=tv;
+                    //        recordPath(id,adjs[i].u,adjs[i].w);
+                    //   }
+                    //    if (tmv<tv)
+                    //    {
+                    //        tmv=tv;
+                    //        tmp_id=adjs[i].u;
+                    //    }
 
                     if (!tmppp.count(adjs[i].u))
                     {
@@ -165,7 +217,7 @@ void Model::Dijkstra(int id)
             return;
         
     }
-}
+}*/
 
 void Model::recordPath(int source,int dest, double w)
 {
