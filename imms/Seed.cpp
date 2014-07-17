@@ -12,8 +12,6 @@ Seed::Seed(std::vector<std::string> files){
 	graph=new Graph(files);
     graph->buildGraph();
     setVariables();
-    //std::map<int,int>::iterator iter=this->node_id_map.begin();
-    //std::cout<<"total node number: "<<this->node_id_map.size()<<std::endl;
 }
 Seed::~Seed(){
 	delete graph;
@@ -62,7 +60,7 @@ void Seed::writeToFile(int mode)
     if (mode==3){
         fname="other.txt";
     }
-    std::cout<<fname<<std::endl;
+    //std::cout<<fname<<std::endl;
     std::ofstream ofile;
     ofile.open(fname.c_str());
     if (ofile) {

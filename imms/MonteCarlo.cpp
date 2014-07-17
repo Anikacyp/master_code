@@ -37,7 +37,6 @@ void MonteCarlo::init(std::vector<int> seed)
 
 double MonteCarlo::simulation(int num_iter,std::vector<int> seed)
 {
-    //std::cout<<"starting simulation!"<<std::endl;
     int resultSize=0;
     int uniq_num=0;
     init(seed);

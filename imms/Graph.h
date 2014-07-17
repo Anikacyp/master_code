@@ -21,7 +21,7 @@
 
 class Graph{
 private:
-     bool built;
+    bool built;
     std::vector<std::string> files;
     
     //this map store node and its corresponding id;
@@ -30,12 +30,13 @@ private:
     std::map<int,int> node_net_map;
     //this map real node_id and its corresponding nodes;
     std::map<int,std::set<int> > node_set_map;
+    //adjacent tables
+    std::map<int,std::vector<ADJ> > adjTable;
+    //all the edges.
+    std::vector<Edge> Edges;
     
     //nii record the influence between the same node.
-    std::map<int,double> weakCoeff;
-    
-    std::map<int,std::vector<ADJ> > adjTable;
-    std::vector<Edge> Edges;
+    //std::map<int,double> weakCoeff;
 public:
     Graph(std::vector<std::string> files);
     Graph();
@@ -43,16 +44,17 @@ public:
     void fileInput();
     void buildGraph();
     void adjacentTable(int u,int v,double w);
-    void weakCoefficient();
     void nodeintGraph();
     bool isBuilt();
-    //return variables
+    
     std::map<int,int> getNodeIdMap();
     std::map<int,int> getNodeNetMap();
     std::map<int,std::set<int> >getNodeSetMap();
-    std::map<int,double> getWeakCoeff();
     std::map<int,std::vector<ADJ> > getAdjTable();
     std::vector<Edge> getEdges();
+    
+    //std::map<int,double> getWeakCoeff();
+    //void weakCoefficient();
 };
 
 #endif /* defined(__imms__Graph__) */

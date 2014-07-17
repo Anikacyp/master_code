@@ -26,8 +26,8 @@ private:
     std::map<int,int> node_id_map;
     std::map<int,int> node_net_map;
     std::map<int,std::set<int> > node_set_map;
-    //std::map<int,double> weakCoeff;
     std::map<int,std::vector<ADJ> > adjTable;
+    //std::map<int,double> weakCoeff;
     
     //tmp vairables
     std::set<int>tat;
@@ -41,20 +41,26 @@ private:
     std::map<int,std::map<int,double> > miv;
     std::map<int,std::map<int,std::vector<ADJ> > >mip;
     
+    std::map<int,std::map<int,std::set<ADJ> > > mia;
+    //std::map<int,TreeNode> moa;
+    
 public:
     Model(Graph *graph);
     Model();
     ~Model();
+    void setVariables(Graph *graph);
+    
     void traversal(int type);
-    //void spread(int node);
-    void recordPath(int source,int dest,double w);
     void MPP();
     void Dijkstra(int id);
-    int randomNum(int range);
-    void setVariables(Graph *graph);
+    void recordPath(int source,int dest,double w);
     void print();
-    std::map<int,std::map<int,double> > getMiv();
-    std::map<int,std::map<int,std::vector<ADJ> > > getMip();
+    
+    void buildMIA();
+    
+    /*
+    int randomNum(int range);
+    void spread(int node);*/
 };
 
 #endif /* defined(__imms__Model__) */

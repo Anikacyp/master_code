@@ -19,9 +19,11 @@
 class ppTree
 {
 private:
-    std::map<int,double> nodeSpread;
+    //std::map<int,double> nodeSpread;
     std::map<int,std::map<int,double> > miv;
     std::map<int,std::map<int,std::vector<ADJ> > >mip;
+    std::map<int,int> node_id_map;
+    std::map<int,int> node_net_map;
     std::map<int,TreeNode> mia;
     std::map<int,TreeNode> moa;
 public:

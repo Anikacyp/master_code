@@ -27,34 +27,20 @@ void Model::setVariables(Graph *graph)
     this->adjTable=graph->getAdjTable();
 }
 
-int randomNum(int range)
+/*int randomNum(int range)
 {
     srand(unsigned(time(0)));
     return rand()%range;
-}
+}*/
 
 void Model::traversal(int type)
 {
-    /*std::map<int,int>::iterator iter=this->node_id_map.begin();
-    while (iter!=node_id_map.end()) {
-        spread(iter->first);
-        iter++;
-    }
-    std::map<int,std::vector<ADJ> >::iterator iter=adjTable.begin();
-     while (iter!=adjTable.end()) {
-     std::cout<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<":"<<std::endl;
-     std::vector<ADJ> adjs=iter->second;
-     for (int i=0; i<adjs.size(); i++) {
-     std::cout<<node_id_map[adjs[i].u]<<"_"<<node_net_map[adjs[i].u]<<"\t"<<adjs[i].w<<std::endl;
-     }
-     std::cout<<"-------------------"<<std::endl;
-     iter++;
-     }*/
-    
     if(type==2)
     {
         MPP();
-        print();
+        //print();
+        //std::cout<<"/////////////////////////////////////"<<std::endl;
+        buildMIA();
     }
 }
 
@@ -70,12 +56,9 @@ void Model::MPP()
         tmpS.clear();
         tmpids.clear();
 		
-        //tmpS.insert(current_node);
         tmppp[current_node]=1.0;
         ADJ adj(current_node,1.0);
         tmppath[current_node].push_back(adj);
-        
-        //tmpids.insert(node_id_map[current_node]);
         
         Dijkstra(current_node);
         
@@ -135,7 +118,6 @@ void Model::Dijkstra(int id)
             Dijkstra(tmp_id);
         }else
             return;
-        
     }
 }
 
@@ -227,19 +209,51 @@ void Model::recordPath(int source,int dest, double w)
     tmppath[dest]=adjs;
 }
 
-std::map<int,std::map<int,double> > Model::getMiv()
+void Model::buildMIA()
 {
-    return this->miv;
-}
-std::map<int,std::map<int,std::vector<ADJ> > > Model::getMip()
-{
-    return this->mip;
+    std::map<int,std::set<ADJ> > tmp_graph;
+    std::map<int,std::map<int,std::vector<ADJ> > >::iterator iter=mip.begin();
+    while (iter!=mip.end()) {
+        std::map<int,std::vector<ADJ> >::iterator iter_path=iter->second.begin();
+        while (iter_path!=iter->second.end()) {
+            tmp_graph.clear();
+            if (mia.count(iter_path->first) && iter_path->second.size()>1) {
+                tmp_graph=mia[iter_path->first];
+            }
+            for (int i=iter_path->second.size()-1; i>=0; i--) {
+                if (i-1>=0) {
+                	ADJ tadj(iter_path->second[i-1].u,iter_path->second[i].w);
+                    tmp_graph[iter_path->second[i].u].insert(tadj);
+                }
+            }
+            if (tmp_graph.size()>0) {
+            	mia[iter_path->first]=tmp_graph;
+            }
+            iter_path++;
+        }
+        iter++;
+    }
+    /*std::map<int,std::map<int,std::set<ADJ> > >::iterator iter1=mia.begin();
+    while (iter1!=mia.end()) {
+        std::cout<<"current root is "<<node_id_map[iter1->first]<<"_"<<node_net_map[iter1->first]<<std::endl;
+        std::map<int,std::set<ADJ> >::iterator iter2=iter1->second.begin();
+        while (iter2!=iter1->second.end()) {
+            std::cout<<node_id_map[iter2->first]<<"_"<<node_net_map[iter2->first]<<" :\t";
+            std::set<ADJ>::iterator iter3=iter2->second.begin();
+            while (iter3!=iter2->second.end()) {
+                std::cout<<node_id_map[iter3->u]<<"_"<<node_net_map[iter3->u]<<":"<<iter3->w<<"\t";
+                iter3++;
+            }
+            std::cout<<"\n\n"<<std::endl;
+            iter2++;
+        }
+        iter1++;
+    }*/
 }
 
 void Model::print(){
     std::map<int,std::map<int,double> >::iterator iter=miv.begin();
     while (iter!=miv.end()) {
-        //std::cout<<"----"<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<"----"<<std::endl;
         std::map<int,double> tval=iter->second;
         std::map<int,std::vector<ADJ> > tpath=mip[iter->first];
         std::map<int,double>::iterator iter1=tval.begin();
@@ -255,3 +269,6 @@ void Model::print(){
         iter++;
     }
 }
+
+
+

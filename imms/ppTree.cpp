@@ -22,6 +22,9 @@ void ppTree::setVariables(Model *model)
 {
     this->miv=model->getMiv();
     this->mip=model->getMip();
+    this->node_id_map=model->getNodeIdMap();
+    this->node_net_map=model->getNodeNetMap();
+	
 }
 
 void ppTree::buildTree()

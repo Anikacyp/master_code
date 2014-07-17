@@ -92,60 +92,25 @@ void Graph::buildGraph()
                 edge.v=tmp_nu;
                 edge.pp=w2;
                 Edges.push_back(edge);
-                //std::cout<<tmp_nu<<"\t"<<tmp_nv<<"\t"<<w1<<"\t"<<w2<<std::endl;
                 if (w1>0) {
                     adjacentTable(tmp_nu,tmp_nv,w1);
                 }
                 if (w2>0) {
                     adjacentTable(tmp_nv,tmp_nu,w2);
                 }
-                //adjacentTable(tmp_nu,tmp_nv,w1);
-                //adjacentTable(tmp_nv,tmp_nu,w2);
             }
         }
         ifile.close();
     }
     //weakCoefficient();
     nodeintGraph();
-	/*std::map<int,int>::iterator iter=node_id_map.begin();
-	while (iter!=node_id_map.end()) {
-        std::cout<<iter->first<<"\t"<<iter->second<<std::endl;
-    	iter++;
-	}
-    std::cout<<std::endl;
-    iter=node_net_map.begin();
-    while (iter!=node_net_map.end()) {
-        std::cout<<iter->first<<"\t"<<iter->second<<std::endl;
-        iter++;
-    }
-    std::cout<<node_set_map.size()<<std::endl;
-    std::map<int,std::set<int> >::iterator iter1=node_set_map.begin();
-    while (iter1!=node_set_map.end()) {
-        std::set<int> tset=iter1->second;
-        std::set<int>::iterator iter2=tset.begin();
-        std::cout<<iter1->first<<"\t";
-        while (iter2!=tset.end()) {
-            std::cout<<*iter2<<"\t";
-            iter2++;
-        }
-        std::cout<<std::endl;
-        iter1++;
-    }*/
-    /*std::map<int,std::vector<ADJ> >::iterator iter=adjTable.begin();
-    while (iter!=adjTable.end()) {
-        std::vector<ADJ> ads=iter->second;
-        for (int i=0; i<ads.size(); i++) {
-            std::cout<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<"\t"<<node_id_map[ads[i].u]<<"_"<<node_net_map[ads[i].u]<<"\t"<<ads[i].w<<std::endl;
-        }
-        iter++;
-    }*/
     
     built=true;
     std::cout<<"node_set_map size: \t"<<node_set_map.size()<<std::endl;
     std::cout<<"node_id_map size: \t"<<node_id_map.size()<<std::endl;
 }
 
-void Graph::weakCoefficient()
+/*void Graph::weakCoefficient()
 {
     srand(unsigned(time(0)));
     double tval=0.0;
@@ -160,7 +125,7 @@ void Graph::weakCoefficient()
         //naive[iter->first]=tval;
         iter++;
     }
-}
+}*/
 
 void Graph::nodeintGraph()
 {
@@ -208,10 +173,6 @@ std::map<int,std::set<int> > Graph::getNodeSetMap()
 {
     return node_set_map;
 }
-std::map<int,double> Graph::getWeakCoeff()
-{
-    return weakCoeff;
-}
 std::map<int,std::vector<ADJ> > Graph::getAdjTable()
 {
     return adjTable;
@@ -225,3 +186,7 @@ bool Graph::isBuilt()
     return built;
 }
 
+/*std::map<int,double> Graph::getWeakCoeff()
+ {
+ return weakCoeff;
+ }*/

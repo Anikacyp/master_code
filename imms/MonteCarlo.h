@@ -32,6 +32,7 @@ private:
     std::set<int> active_nodes;
     std::set<int> active_ids;
     std::vector<int> seedvec;
+    
 public:
     MonteCarlo(Graph *graph);
     MonteCarlo();

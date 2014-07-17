@@ -26,6 +26,12 @@ struct ADJ
     double w;
     ADJ(int n,double weight):u(n),w(weight){}
     ADJ(){}
+    bool operator<(const ADJ &adj) const{
+        return u<adj.u;
+    }
+    bool operator==(const ADJ &adj) const{
+        return ((u==adj.u)&&(w==adj.w));
+    }
 };
 
 struct HeapNode{
@@ -34,11 +40,12 @@ struct HeapNode{
     double value;
 };
 
-struct TreeNode
+/*struct TreeNode
 {
-    int node;
-    std::vector<int> children;
-    int parent;
-    double weight;
-};
+    int data;
+    std::vector<TreeNode> children;
+    std::vector<double> weights;
+    TreeNode(){}
+    TreeNode(int value):data(value){}
+};*/
 #endif /* defined(__imms__Objects__) */
