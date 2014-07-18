@@ -18,6 +18,7 @@
 #include "Graph.h"
 #include "Objects.h"
 #include "limit.h"
+#include "Heap.h"
 
 class Model
 {
@@ -36,13 +37,18 @@ private:
     std::map<int,std::vector<ADJ> >tmppath;
     std::set<int> tmpS;
     std::set<int> tmpids;
+    double spread;
+    double total_spread;
     
     //result variables
     std::map<int,std::map<int,double> > miv;
     std::map<int,std::map<int,std::vector<ADJ> > >mip;
     
     std::map<int,std::map<int,std::set<ADJ> > > mia;
-    //std::map<int,TreeNode> moa;
+    std::vector<HeapNode> init_seed_spread;
+    
+    std::map<int,double> seed_spread_benefit;
+    std::set<int> seedset;
     
 public:
     Model(Graph *graph);
@@ -54,10 +60,13 @@ public:
     void MPP();
     void Dijkstra(int id);
     void recordPath(int source,int dest,double w);
-    void print();
-    
     void buildMIA();
     
+	void run();
+    double updateBenefit(int node,std::set<int>);
+    double ap(int target);
+    
+    void print();
     /*
     int randomNum(int range);
     void spread(int node);*/

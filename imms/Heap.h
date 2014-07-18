@@ -12,22 +12,27 @@
 #include <iostream>
 #include "Objects.h"
 #include <vector>
+#include <map>
+
 class Heap
 {
 private:
     std::vector<HeapNode> data;
+    std::map<int,int> node_id_map;
+    std::map<int,int> node_net_map;
+    std::map<int,int> pos;
     int size;
 public:
-    Heap();
+    Heap(std::map<int,int> map1,std::map<int,int> map2,std::vector<HeapNode> &data);
     ~Heap();
     void buildHeap(std::vector<HeapNode> &data);
     void heapSort(std::vector<HeapNode> &data);
     void heapAdjust(std::vector<HeapNode> &data,int pos);
-    
-    void insert();
-    HeapNode pop();
-    void print(std::vector<HeapNode> & data);
     void swap(std::vector<HeapNode> & data,int p1,int p2);
+    HeapNode pop(std::vector<HeapNode> &data,int isPop);
+    
+    void update(int node,double val);
+    void print(std::vector<HeapNode> data);
 };
 
 #endif /* defined(__imms__Heap__) */

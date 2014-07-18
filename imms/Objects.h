@@ -38,6 +38,8 @@ struct HeapNode{
     int node;
     int status;
     double value;
+    HeapNode():node(-1),status(-1),value(-1){}
+    HeapNode(int n,int s,int v):node(n),status(s),value(v){}
 };
 
 /*struct TreeNode

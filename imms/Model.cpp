@@ -38,32 +38,43 @@ void Model::traversal(int type)
     if(type==2)
     {
         MPP();
-        //print();
-        //std::cout<<"/////////////////////////////////////"<<std::endl;
+        print();
+        std::cout<<"///////////////////////////////"<<std::endl;
         buildMIA();
+        //run();
+        
     }
 }
 
 void Model::MPP()
 {
     std::map<int,int>::iterator iter=this->node_id_map.begin();
+    HeapNode hnode;
     while (iter!=node_id_map.end()) {
         
         current_node=iter->first;
-        
         tmppp.clear();
         tmppath.clear();
         tmpS.clear();
         tmpids.clear();
+        spread=0.0;
 		
         tmppp[current_node]=1.0;
         ADJ adj(current_node,1.0);
         tmppath[current_node].push_back(adj);
+        //spread+=1.0;
         
         Dijkstra(current_node);
         
         miv[current_node]=tmppp;
         mip[current_node]=tmppath;
+        
+		if (spread>0) {
+            hnode.node=current_node;
+            hnode.status=0;
+            hnode.value=spread;
+            init_seed_spread.push_back(hnode);
+        }
         
         iter++;
     }
@@ -113,6 +124,7 @@ void Model::Dijkstra(int id)
         //recursive call
     	if (tmp_id!=-1)
         {
+            spread+=tmv;
             tmpS.insert(tmp_id);
             tmpids.insert(node_id_map[tmp_id]);
             Dijkstra(tmp_id);
@@ -233,7 +245,7 @@ void Model::buildMIA()
         }
         iter++;
     }
-    /*std::map<int,std::map<int,std::set<ADJ> > >::iterator iter1=mia.begin();
+    std::map<int,std::map<int,std::set<ADJ> > >::iterator iter1=mia.begin();
     while (iter1!=mia.end()) {
         std::cout<<"current root is "<<node_id_map[iter1->first]<<"_"<<node_net_map[iter1->first]<<std::endl;
         std::map<int,std::set<ADJ> >::iterator iter2=iter1->second.begin();
@@ -248,7 +260,62 @@ void Model::buildMIA()
             iter2++;
         }
         iter1++;
-    }*/
+    }
+}
+
+void Model::run()
+{
+    total_spread=0.0;
+    Heap * heap=new Heap(node_id_map,node_net_map,init_seed_spread);
+    heap->buildHeap(init_seed_spread);
+    for (int i=0; i<SEED_SIZE; i++) {
+        HeapNode node=heap->pop(init_seed_spread,1);
+        
+        
+        total_spread+=node.value;
+        seedset.insert(node.node);
+        
+        std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<std::endl;
+        
+        while (1)
+        {
+            heap->heapAdjust(init_seed_spread,0);
+            node=heap->pop(init_seed_spread,0);
+            if (node.status!=i+1)
+            {
+                node.value=updateBenefit(node.node,seedset);
+                //更新init_seed_spread的值
+            }else
+            {
+                break;
+            }
+        }
+    }
+    delete heap;
+}
+
+
+double Model::updateBenefit(int node,std::set<int>seed)
+{
+    
+    std::map<int,double> tmp_inf=miv[node];
+    /*if (tmp_inf.size()==1) {
+        return 1;
+    }else
+    {*/
+        std::map<int,double>::iterator iter=tmp_inf.begin();
+        while (iter!=tmp_inf.end()) {
+            std::map<int,std::set<ADJ> > tmp_rtree=mia[iter->first];
+            
+            iter++;
+        }
+    //}
+    return 0;
+}
+
+double Model::ap(int target)
+{
+    
 }
 
 void Model::print(){
@@ -269,6 +336,5 @@ void Model::print(){
         iter++;
     }
 }
-
 
 
