@@ -134,7 +134,7 @@ void Graph::nodeintGraph()
     std::map<int,std::set<int> >::iterator iter=node_set_map.begin();
     while (iter!=node_set_map.end()) {
         tmpvec.clear();
-        int id=iter->first;
+        //int id=iter->first;
         std::set<int> nodes=iter->second;
         std::set<int>::iterator iter1=nodes.begin();
         while (iter1!=nodes.end()) {

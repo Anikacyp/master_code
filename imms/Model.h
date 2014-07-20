@@ -42,13 +42,22 @@ private:
     
     //result variables
     std::map<int,std::map<int,double> > miv;
+    //最大传播路径
     std::map<int,std::map<int,std::vector<ADJ> > >mip;
-    
+    //逆向最大传播路径
     std::map<int,std::map<int,std::set<ADJ> > > mia;
+    //初始点的Spread值
     std::vector<HeapNode> init_seed_spread;
-    
-    std::map<int,double> seed_spread_benefit;
+    //每个点和其在heap中所对应的位置
+    std::map<int,int> heapPos;
+    //每个点的Spread值
+    std::map<int,double> node_influence;
+    //所选的种子集合
     std::set<int> seedset;
+    
+    //使用最大路径局部传播树计算marginal gain时使用的变量。
+    std::map<int,double> aps;
+    
     
 public:
     Model(Graph *graph);
@@ -63,8 +72,8 @@ public:
     void buildMIA();
     
 	void run();
-    double updateBenefit(int node,std::set<int>);
-    double ap(int target);
+    double updateBenefit(int node);
+    double ap(int root,int child,std::set<int> tmpseed);
     
     void print();
     /*

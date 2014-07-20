@@ -38,11 +38,10 @@ void Model::traversal(int type)
     if(type==2)
     {
         MPP();
-        print();
+        //print();
         std::cout<<"///////////////////////////////"<<std::endl;
         buildMIA();
-        //run();
-        
+        run();
     }
 }
 
@@ -62,7 +61,7 @@ void Model::MPP()
         tmppp[current_node]=1.0;
         ADJ adj(current_node,1.0);
         tmppath[current_node].push_back(adj);
-        //spread+=1.0;
+        spread+=1.0;
         
         Dijkstra(current_node);
         
@@ -74,6 +73,7 @@ void Model::MPP()
             hnode.status=0;
             hnode.value=spread;
             init_seed_spread.push_back(hnode);
+            heapPos[current_node]=init_seed_spread.size()-1;
         }
         
         iter++;
@@ -82,8 +82,8 @@ void Model::MPP()
 
 void Model::Dijkstra(int id)
 {
-    tmpS.insert(current_node);
-    tmpids.insert(node_id_map[current_node]);
+    tmpS.insert(id);
+    tmpids.insert(node_id_map[id]);
     
     if (adjTable.count(id)) {
         double tv=0.0,tmv=0.0;
@@ -126,7 +126,6 @@ void Model::Dijkstra(int id)
         {
             spread+=tmv;
             tmpS.insert(tmp_id);
-            tmpids.insert(node_id_map[tmp_id]);
             Dijkstra(tmp_id);
         }else
             return;
@@ -245,7 +244,7 @@ void Model::buildMIA()
         }
         iter++;
     }
-    std::map<int,std::map<int,std::set<ADJ> > >::iterator iter1=mia.begin();
+    /*std::map<int,std::map<int,std::set<ADJ> > >::iterator iter1=mia.begin();
     while (iter1!=mia.end()) {
         std::cout<<"current root is "<<node_id_map[iter1->first]<<"_"<<node_net_map[iter1->first]<<std::endl;
         std::map<int,std::set<ADJ> >::iterator iter2=iter1->second.begin();
@@ -260,62 +259,110 @@ void Model::buildMIA()
             iter2++;
         }
         iter1++;
-    }
+    }*/
 }
 
 void Model::run()
 {
     total_spread=0.0;
+    
     Heap * heap=new Heap(node_id_map,node_net_map,init_seed_spread);
     heap->buildHeap(init_seed_spread);
+
+    node_influence=miv[(heap->pop(init_seed_spread,0)).node];
+    
     for (int i=0; i<SEED_SIZE; i++) {
         HeapNode node=heap->pop(init_seed_spread,1);
-        
-        
-        total_spread+=node.value;
-        seedset.insert(node.node);
-        
         std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<std::endl;
+        seedset.insert(node.node);
+    	/*double gain=updateBenefit(node.node);
+        std::cout<<"\tgain calculated: "<<gain<<std::endl;
+        if (i==1) {
+            break;
+            return;
+        }*/
         
+        //heap->heapAdjust(init_seed_spread,0);
+        total_spread+=node.value;
         while (1)
         {
+            double gain=0.0;
             heap->heapAdjust(init_seed_spread,0);
             node=heap->pop(init_seed_spread,0);
-            if (node.status!=i+1)
+            if (node.status<i+1)
             {
-                node.value=updateBenefit(node.node,seedset);
+                gain=updateBenefit(node.node);
+                //std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<std::endl;
+                gain=gain-total_spread;
+         		init_seed_spread[init_seed_spread.size()-1].value=gain;
+                init_seed_spread[init_seed_spread.size()-1].status=i+1;
                 //更新init_seed_spread的值
             }else
             {
+                std::cout<<node_id_map[node.node]<<"-"<<node_net_map[node.node]<<"\t"<<node.value<<std::endl;
                 break;
             }
         }
+        
     }
     delete heap;
 }
 
 
-double Model::updateBenefit(int node,std::set<int>seed)
+double Model::updateBenefit(int node)
 {
+    //std::map<int,double> tmp_node_inf=node_influence;
+    std::set<int> tmp_seed=seedset;
     
-    std::map<int,double> tmp_inf=miv[node];
-    /*if (tmp_inf.size()==1) {
-        return 1;
-    }else
-    {*/
-        std::map<int,double>::iterator iter=tmp_inf.begin();
-        while (iter!=tmp_inf.end()) {
-            std::map<int,std::set<ADJ> > tmp_rtree=mia[iter->first];
-            
-            iter++;
-        }
-    //}
-    return 0;
+    tmp_seed.insert(node);
+    double benefit=0.0;
+    
+    std::map<int,double>::iterator iter=miv[node].begin();
+    while (iter!=miv[node].end()) {
+        aps.clear();
+        //std::cout<<node_id_map[node]<<"_"<<node_net_map[node]<<":\t"<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<"\t"<<iter->second<<std::endl;
+		double infval=ap(iter->first,iter->first,tmp_seed);
+        //std::cout<<node_id_map[node]<<"_"<<node_net_map[node]<<":\t"<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<"\t"<<infval<<std::endl;
+        //std::cout<<"\n\n"<<std::endl;
+        benefit+=infval;
+        iter++;
+    }
+    return benefit;
 }
 
-double Model::ap(int target)
+double Model::ap(int root,int child,std::set<int> tmp_seed)
 {
-    
+    //std::cout<<root<<":\troot "<<node_id_map[root]<<"_"<<node_net_map[root]<<"\t child "<<node_id_map[child]<<"_"<<node_net_map[child]<<std::endl;
+    std::map<int,std::set<ADJ> > mia_tree=mia[root];
+    double pp=0.0;
+    //if (mia_tree.count(child)) {
+    if (tmp_seed.count(child)) {
+        //std::cout<<"for contained seed: "<<child<<"\t "<<node_id_map[child]<<"_"<<node_net_map[child]<<"\t"<<1.0<<std::endl;
+        pp=1.0;
+        aps[child]=pp;
+        return pp;
+    }
+    if (!mia_tree.count(child)) {
+        pp=0.0;
+        aps[child]=pp;
+        return pp;
+    }
+    else
+    {
+        std::set<ADJ>::iterator iter=mia_tree[child].begin();
+        double tmp_pp=1.0;
+        while (iter!=mia_tree[child].end()) {
+            //std::cout<<"for "<<node_id_map[child]<<"_"<<node_net_map[child]<<"\t "<<node_id_map[iter->u]<<"_"<<node_net_map[iter->u]<<"\t"<<iter->w<<std::endl;
+            if (!aps.count(iter->u)) {
+                aps[iter->u]=ap(root,iter->u,tmp_seed);
+            }
+            tmp_pp*=(1-aps[iter->u]*(iter->w));
+            iter++;
+        }
+        pp=1-tmp_pp;
+        aps[child]=pp;
+        return pp;
+    }
 }
 
 void Model::print(){
