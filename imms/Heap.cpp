@@ -18,15 +18,6 @@ Heap::~Heap(){}
 
 void Heap::heapSort(std::vector<HeapNode> & data)
 {
-    /*this->size=data.size();
-    buildHeap(data);
-    
-    for (int i=size-1; i>=1; i--) {
-        swap(data,0,i);
-        this->size-=1;
-        heapAdjust(data,0);
-    }*/
-    //this->size=data.size();
     buildHeap(data);
     for (int i=0; i<size; i++) {
         HeapNode node=pop(data,1);
@@ -69,7 +60,6 @@ void Heap::heapAdjust(std::vector<HeapNode> & data, int pos)
     }*/
 }
 
-
 void Heap::swap(std::vector<HeapNode> & data,int p1,int p2)
 {
     HeapNode tmpnode;
@@ -81,13 +71,13 @@ void Heap::swap(std::vector<HeapNode> & data,int p1,int p2)
     
 }
 
-void Heap::update(int node, double val)
+/*void Heap::update(int node, double val)
 {
     int position=pos[node];
     data[position].value=val;
     heapAdjust(data,0);
     
-}
+}*/
 
 HeapNode Heap::pop(std::vector<HeapNode> &data,int pop)
 {
@@ -95,7 +85,7 @@ HeapNode Heap::pop(std::vector<HeapNode> &data,int pop)
     if (data.size()>0) {
         //node=data[data.size()-1];
         node=data[0];
-        if (pop) {
+        if (pop>0) {
             swap(data,0,data.size()-1);
             data.pop_back();
         }

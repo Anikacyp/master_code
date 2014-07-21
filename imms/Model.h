@@ -48,13 +48,13 @@ private:
     std::map<int,std::map<int,std::set<ADJ> > > mia;
     //初始点的Spread值
     std::vector<HeapNode> init_seed_spread;
-    //每个点和其在heap中所对应的位置
-    std::map<int,int> heapPos;
     //每个点的Spread值
     std::map<int,double> node_influence;
-    std::map<int,double> tmp_node_influence;
+    std::map<int,std::map<int,double> >tmp_node_influence;
     //所选的种子集合
     std::set<int> seedset;
+    std::vector<int> seeds;
+    std::vector<double> spreads;
     
     //使用最大路径局部传播树计算marginal gain时使用的变量。
     std::map<int,double> aps;
@@ -77,6 +77,8 @@ public:
     double ap(int root,int child,std::set<int> tmpseed);
     
     void print();
+    std::vector<int> getSeed();
+    std::vector<double> getSpread();
     /*
     int randomNum(int range);
     void spread(int node);*/

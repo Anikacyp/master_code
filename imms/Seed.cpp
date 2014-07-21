@@ -28,20 +28,21 @@ void Seed::run(int mode)
     if (mode==1) {
     	BaseLine *baseline=new BaseLine(graph);
         baseline->run();
-        //return results
         this->seeds=baseline->getSeed();
         this->spreads=baseline->getSpread();
         delete baseline;
         writeToFile(1);
     }
-    //propagation tree method
+    //the maximum propagation path method
     if (mode==2) {
         Model *model=new Model(graph);
         model->traversal(2);
+        this->seeds=model->getSeed();
+        this->spreads=model->getSpread();
     	delete model;
-        //writeToFile(2);
+        writeToFile(2);
     }
-    //the maximum propagation path method
+    
     if (mode==3) {
         writeToFile(3);
     }

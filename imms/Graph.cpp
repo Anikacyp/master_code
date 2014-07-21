@@ -145,7 +145,7 @@ void Graph::nodeintGraph()
             for (int j=0; j<tmpvec.size(); j++) {
                 if (i!=j) {
                     double tval=rand()/(double)(RAND_MAX);
-                    tval*=0.1;
+                    //tval*=0.1;
                     adjacentTable(tmpvec[i],tmpvec[j],tval);
                 }
             }

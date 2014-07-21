@@ -20,7 +20,6 @@ private:
     std::vector<HeapNode> data;
     std::map<int,int> node_id_map;
     std::map<int,int> node_net_map;
-    std::map<int,int> pos;
     int size;
 public:
     Heap(std::map<int,int> map1,std::map<int,int> map2,std::vector<HeapNode> &data);
@@ -31,7 +30,7 @@ public:
     void swap(std::vector<HeapNode> & data,int p1,int p2);
     HeapNode pop(std::vector<HeapNode> &data,int isPop);
     
-    void update(int node,double val);
+    //void update(int node,double val);
     void print(std::vector<HeapNode> data);
 };
 

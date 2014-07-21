@@ -45,6 +45,102 @@ void Model::traversal(int type)
     }
 }
 
+void Model::run()
+{
+    Heap * heap=new Heap(node_id_map,node_net_map,init_seed_spread);
+    heap->buildHeap(init_seed_spread);
+    total_spread=0.0;
+    node_influence.clear();
+    node_influence=miv[(heap->pop(init_seed_spread,0)).node];
+    bool flag=true;
+    for (int i=0; i<SEED_SIZE; i++) {
+        HeapNode node=heap->pop(init_seed_spread,1);
+        seeds.push_back(node.node);
+        spreads.push_back(node.value);
+        seedset.insert(node.node);
+        total_spread+=node.value;
+        
+        std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<"\t total spread\t"<<total_spread<<std::endl;
+        flag=true;
+        tmp_node_influence.clear();
+        
+        while (flag)
+        {
+            double gain=0.0;
+            heap->heapAdjust(init_seed_spread,0);
+            node=heap->pop(init_seed_spread,0);
+            if (node.status<i+1)
+            {
+                gain=updateBenefit(node.node);
+         		init_seed_spread[0].value=gain;
+                init_seed_spread[0].status=i+1;
+                //heap->heapAdjust(init_seed_spread,0);
+            }else
+            {
+                node_influence=tmp_node_influence[node.node];
+                flag=false;
+            }
+        }
+    }
+    delete heap;
+}
+
+double Model::updateBenefit(int node)
+{
+    std::map<int,double> t_inf=node_influence;
+    std::set<int> tmp_seed=seedset;
+    tmp_seed.insert(node);
+    double benefit=0.0;
+    
+    std::map<int,double>::iterator iter=miv[node].begin();
+    while (iter!=miv[node].end()) {
+        aps.clear();
+		double infval=ap(iter->first,iter->first,tmp_seed);
+        t_inf[iter->first]=infval;
+        iter++;
+    }
+    std::map<int,double>::iterator viter=t_inf.begin();
+    while (viter!=t_inf.end()) {
+        benefit+=viter->second;
+        viter++;
+    }
+    benefit-=total_spread;
+    tmp_node_influence[node]=t_inf;
+    return benefit;
+}
+
+double Model::ap(int root,int child,std::set<int> tmp_seed)
+{
+    std::map<int,std::set<ADJ> > mia_tree=mia[root];
+    double pp=0.0;
+    if (tmp_seed.count(child)) {
+        pp=1.0;
+        aps[child]=1.0;
+        return pp;
+    }
+    if (!mia_tree.count(child)) {
+        pp=0.0;
+        aps[child]=0.0;
+        return pp;
+    }
+    else
+    {
+        std::set<ADJ>::iterator iter=mia_tree[child].begin();
+        double tmp_pp=1.0;
+        while (iter!=mia_tree[child].end()) {
+            if (!aps.count(iter->u)) {
+                aps[iter->u]=ap(root,iter->u,tmp_seed);
+            }
+            tmp_pp*=(1-aps[iter->u]*(iter->w));
+            iter++;
+        }
+        pp=1-tmp_pp;
+        aps[child]=pp;
+        return pp;
+    }
+}
+
+
 void Model::MPP()
 {
     std::map<int,int>::iterator iter=this->node_id_map.begin();
@@ -57,7 +153,7 @@ void Model::MPP()
         tmpS.clear();
         tmpids.clear();
         spread=0.0;
-		
+        
         tmppp[current_node]=1.0;
         ADJ adj(current_node,1.0);
         tmppath[current_node].push_back(adj);
@@ -73,7 +169,6 @@ void Model::MPP()
             hnode.status=0;
             hnode.value=spread;
             init_seed_spread.push_back(hnode);
-            heapPos[current_node]=init_seed_spread.size()-1;
         }
         
         iter++;
@@ -262,97 +357,6 @@ void Model::buildMIA()
     }*/
 }
 
-void Model::run()
-{
-    total_spread=0.0;
-    
-    Heap * heap=new Heap(node_id_map,node_net_map,init_seed_spread);
-    heap->buildHeap(init_seed_spread);
-
-    node_influence=miv[(heap->pop(init_seed_spread,0)).node];
-    
-    for (int i=0; i<10; i++) {
-        HeapNode node=heap->pop(init_seed_spread,1);
-        total_spread+=node.value;
-        seedset.insert(node.node);
-        std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<"\t total spread\t"<<total_spread<<std::endl;
-        while (1)
-        {
-            double gain=0.0;
-            heap->heapAdjust(init_seed_spread,0);
-            node=heap->pop(init_seed_spread,0);
-            if (node.status<i+1)
-            {
-                gain=updateBenefit(node.node);
-         		init_seed_spread[0].value=gain;
-                init_seed_spread[0].status=i+1;
-            }else
-            {
-                node_influence=tmp_node_influence;
-                break;
-            }
-        }
-        
-    }
-    delete heap;
-}
-
-
-double Model::updateBenefit(int node)
-{
-    tmp_node_influence.clear();
-    tmp_node_influence=node_influence;
-    std::set<int> tmp_seed=seedset;
-    
-    tmp_seed.insert(node);
-    double benefit=0.0;
-    
-    std::map<int,double>::iterator iter=miv[node].begin();
-    while (iter!=miv[node].end()) {
-        aps.clear();
-		double infval=ap(iter->first,iter->first,tmp_seed);
-        tmp_node_influence[iter->first]=infval;
-        iter++;
-    }
-    std::map<int,double>::iterator viter=tmp_node_influence.begin();
-    while (viter!=tmp_node_influence.end()) {
-        benefit+=viter->second;
-        viter++;
-    }
-    benefit-=total_spread;
-    return benefit;
-}
-
-double Model::ap(int root,int child,std::set<int> tmp_seed)
-{
-    std::map<int,std::set<ADJ> > mia_tree=mia[root];
-    double pp=0.0;
-    if (tmp_seed.count(child)) {
-        pp=1.0;
-        aps[child]=pp;
-        return pp;
-    }
-    if (!mia_tree.count(child)) {
-        pp=0.0;
-        aps[child]=pp;
-        return pp;
-    }
-    else
-    {
-        std::set<ADJ>::iterator iter=mia_tree[child].begin();
-        double tmp_pp=1.0;
-        while (iter!=mia_tree[child].end()) {
-            if (!aps.count(iter->u)) {
-                aps[iter->u]=ap(root,iter->u,tmp_seed);
-            }
-            tmp_pp*=(1-aps[iter->u]*(iter->w));
-            iter++;
-        }
-        pp=1-tmp_pp;
-        aps[child]=pp;
-        return pp;
-    }
-}
 
 void Model::print(){
     std::map<int,std::map<int,double> >::iterator iter=miv.begin();
@@ -373,4 +377,13 @@ void Model::print(){
     }
 }
 
+std::vector<int> Model::getSeed()
+{
+    return this->seeds;
+}
+
+std::vector<double> Model::getSpread()
+{
+    return this->spreads;
+}
 
