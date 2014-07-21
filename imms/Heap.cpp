@@ -62,10 +62,11 @@ void Heap::heapAdjust(std::vector<HeapNode> & data, int pos)
     {
         swap(data,largest,pos);
         heapAdjust(data,largest);
-    }else
+    }
+    /*else
     {
         swap(data,0,data.size()-1);
-    }
+    }*/
 }
 
 
@@ -92,8 +93,10 @@ HeapNode Heap::pop(std::vector<HeapNode> &data,int pop)
 {
     HeapNode node;
     if (data.size()>0) {
-        node=data[data.size()-1];
+        //node=data[data.size()-1];
+        node=data[0];
         if (pop) {
+            swap(data,0,data.size()-1);
             data.pop_back();
         }
     }

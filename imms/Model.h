@@ -52,6 +52,7 @@ private:
     std::map<int,int> heapPos;
     //每个点的Spread值
     std::map<int,double> node_influence;
+    std::map<int,double> tmp_node_influence;
     //所选的种子集合
     std::set<int> seedset;
     

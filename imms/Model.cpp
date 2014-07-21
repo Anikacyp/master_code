@@ -39,7 +39,7 @@ void Model::traversal(int type)
     {
         MPP();
         //print();
-        std::cout<<"///////////////////////////////"<<std::endl;
+        //std::cout<<"///////////////////////////////"<<std::endl;
         buildMIA();
         run();
     }
@@ -271,19 +271,11 @@ void Model::run()
 
     node_influence=miv[(heap->pop(init_seed_spread,0)).node];
     
-    for (int i=0; i<SEED_SIZE; i++) {
+    for (int i=0; i<10; i++) {
         HeapNode node=heap->pop(init_seed_spread,1);
-        std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<std::endl;
-        seedset.insert(node.node);
-    	/*double gain=updateBenefit(node.node);
-        std::cout<<"\tgain calculated: "<<gain<<std::endl;
-        if (i==1) {
-            break;
-            return;
-        }*/
-        
-        //heap->heapAdjust(init_seed_spread,0);
         total_spread+=node.value;
+        seedset.insert(node.node);
+        std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<"\t total spread\t"<<total_spread<<std::endl;
         while (1)
         {
             double gain=0.0;
@@ -292,14 +284,11 @@ void Model::run()
             if (node.status<i+1)
             {
                 gain=updateBenefit(node.node);
-                //std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<std::endl;
-                gain=gain-total_spread;
-         		init_seed_spread[init_seed_spread.size()-1].value=gain;
-                init_seed_spread[init_seed_spread.size()-1].status=i+1;
-                //更新init_seed_spread的值
+         		init_seed_spread[0].value=gain;
+                init_seed_spread[0].status=i+1;
             }else
             {
-                std::cout<<node_id_map[node.node]<<"-"<<node_net_map[node.node]<<"\t"<<node.value<<std::endl;
+                node_influence=tmp_node_influence;
                 break;
             }
         }
@@ -311,7 +300,8 @@ void Model::run()
 
 double Model::updateBenefit(int node)
 {
-    //std::map<int,double> tmp_node_inf=node_influence;
+    tmp_node_influence.clear();
+    tmp_node_influence=node_influence;
     std::set<int> tmp_seed=seedset;
     
     tmp_seed.insert(node);
@@ -320,24 +310,24 @@ double Model::updateBenefit(int node)
     std::map<int,double>::iterator iter=miv[node].begin();
     while (iter!=miv[node].end()) {
         aps.clear();
-        //std::cout<<node_id_map[node]<<"_"<<node_net_map[node]<<":\t"<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<"\t"<<iter->second<<std::endl;
 		double infval=ap(iter->first,iter->first,tmp_seed);
-        //std::cout<<node_id_map[node]<<"_"<<node_net_map[node]<<":\t"<<node_id_map[iter->first]<<"_"<<node_net_map[iter->first]<<"\t"<<infval<<std::endl;
-        //std::cout<<"\n\n"<<std::endl;
-        benefit+=infval;
+        tmp_node_influence[iter->first]=infval;
         iter++;
     }
+    std::map<int,double>::iterator viter=tmp_node_influence.begin();
+    while (viter!=tmp_node_influence.end()) {
+        benefit+=viter->second;
+        viter++;
+    }
+    benefit-=total_spread;
     return benefit;
 }
 
 double Model::ap(int root,int child,std::set<int> tmp_seed)
 {
-    //std::cout<<root<<":\troot "<<node_id_map[root]<<"_"<<node_net_map[root]<<"\t child "<<node_id_map[child]<<"_"<<node_net_map[child]<<std::endl;
     std::map<int,std::set<ADJ> > mia_tree=mia[root];
     double pp=0.0;
-    //if (mia_tree.count(child)) {
     if (tmp_seed.count(child)) {
-        //std::cout<<"for contained seed: "<<child<<"\t "<<node_id_map[child]<<"_"<<node_net_map[child]<<"\t"<<1.0<<std::endl;
         pp=1.0;
         aps[child]=pp;
         return pp;
@@ -352,7 +342,6 @@ double Model::ap(int root,int child,std::set<int> tmp_seed)
         std::set<ADJ>::iterator iter=mia_tree[child].begin();
         double tmp_pp=1.0;
         while (iter!=mia_tree[child].end()) {
-            //std::cout<<"for "<<node_id_map[child]<<"_"<<node_net_map[child]<<"\t "<<node_id_map[iter->u]<<"_"<<node_net_map[iter->u]<<"\t"<<iter->w<<std::endl;
             if (!aps.count(iter->u)) {
                 aps[iter->u]=ap(root,iter->u,tmp_seed);
             }
