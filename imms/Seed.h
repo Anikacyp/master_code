@@ -19,6 +19,7 @@ class Seed
 {
 private:
     int type;
+    //std::map<int,double> seed_spread;
     std::vector<int> seeds;
     std::vector<double> spreads;
     std::map<int,int> node_id_map;

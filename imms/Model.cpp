@@ -63,18 +63,18 @@ void Model::run()
         std::cout<<node_id_map[node.node]<<"_"<<node_net_map[node.node]<<"\t"<<node.value<<"\t total spread\t"<<total_spread<<std::endl;
         flag=true;
         tmp_node_influence.clear();
-        
+        heap->heapAdjust(init_seed_spread,0);
         while (flag)
         {
             double gain=0.0;
-            heap->heapAdjust(init_seed_spread,0);
+            //heap->heapAdjust(init_seed_spread,0);
             node=heap->pop(init_seed_spread,0);
             if (node.status<i+1)
             {
                 gain=updateBenefit(node.node);
          		init_seed_spread[0].value=gain;
                 init_seed_spread[0].status=i+1;
-                //heap->heapAdjust(init_seed_spread,0);
+                heap->heapAdjust(init_seed_spread,0);
             }else
             {
                 node_influence=tmp_node_influence[node.node];
@@ -87,6 +87,7 @@ void Model::run()
 
 double Model::updateBenefit(int node)
 {
+    overall_node_influence.clear();
     std::map<int,double> t_inf=node_influence;
     std::set<int> tmp_seed=seedset;
     tmp_seed.insert(node);
@@ -101,10 +102,22 @@ double Model::updateBenefit(int node)
     }
     std::map<int,double>::iterator viter=t_inf.begin();
     while (viter!=t_inf.end()) {
-        benefit+=viter->second;
+        //benefit+=viter->second;
+        benefit=viter->second-node_influence[viter->first];
+        if (overall_node_influence.count(node_id_map[viter->first])) {
+            overall_node_influence[node_id_map[viter->first]]*=(1-benefit);
+        }
+        else
+            overall_node_influence[node_id_map[viter->first]]=(1-benefit);
         viter++;
     }
-    benefit-=total_spread;
+    //benefit-=total_spread;
+    benefit=0.0;
+    std::map<int,double>::iterator biter=overall_node_influence.begin();
+    while (biter!=overall_node_influence.end()) {
+        benefit+=(1-biter->second);
+        biter++;
+    }
     tmp_node_influence[node]=t_inf;
     return benefit;
 }
@@ -152,18 +165,26 @@ void Model::MPP()
         tmppath.clear();
         tmpS.clear();
         tmpids.clear();
+        overall_node_influence.clear();
         spread=0.0;
         
         tmppp[current_node]=1.0;
         ADJ adj(current_node,1.0);
         tmppath[current_node].push_back(adj);
-        spread+=1.0;
+        if (!overall_node_influence.count(node_id_map[current_node])) {
+            overall_node_influence[node_id_map[current_node]]=(1-1.0);
+        }
         
         Dijkstra(current_node);
         
         miv[current_node]=tmppp;
         mip[current_node]=tmppath;
         
+        std::map<int,double>::iterator viter=overall_node_influence.begin();
+        while (viter!=overall_node_influence.end()) {
+            spread+=(1-viter->second);
+            viter++;
+        }
 		if (spread>0) {
             hnode.node=current_node;
             hnode.status=0;
@@ -219,7 +240,14 @@ void Model::Dijkstra(int id)
         //recursive call
     	if (tmp_id!=-1)
         {
-            spread+=tmv;
+            //spread+=tmv;
+            if (overall_node_influence.count(node_id_map[tmp_id]))
+            {
+                overall_node_influence[node_id_map[tmp_id]]*=(1-tmv);
+            }else
+            {
+                overall_node_influence[node_id_map[tmp_id]]=(1-tmv);
+            }
             tmpS.insert(tmp_id);
             Dijkstra(tmp_id);
         }else

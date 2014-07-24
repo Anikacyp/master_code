@@ -129,6 +129,7 @@ void Graph::buildGraph()
 
 void Graph::nodeintGraph()
 {
+    std::ifstream ifile;
     srand(unsigned(time(0)));
     std::vector<int> tmpvec;
     std::map<int,std::set<int> >::iterator iter=node_set_map.begin();

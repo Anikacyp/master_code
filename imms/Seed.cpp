@@ -28,6 +28,7 @@ void Seed::run(int mode)
     if (mode==1) {
     	BaseLine *baseline=new BaseLine(graph);
         baseline->run();
+        //this->seed_spread=baseline->getSeedSpread();
         this->seeds=baseline->getSeed();
         this->spreads=baseline->getSpread();
         delete baseline;
@@ -37,6 +38,7 @@ void Seed::run(int mode)
     if (mode==2) {
         Model *model=new Model(graph);
         model->traversal(2);
+        //this->seed_spread=model->getSeedSpread();
         this->seeds=model->getSeed();
         this->spreads=model->getSpread();
     	delete model;
@@ -72,4 +74,5 @@ void Seed::writeToFile(int mode)
     {
         std::cout<<"fail to open "<<fname<<std::endl;
     }
+    ofile.close();
 }

@@ -52,6 +52,7 @@ int BaseLine::nextSeed()
         }
         iter++;
     }
+    //seed_spread[nexe_seed_id]=value;
     spreads.push_back(value);
     return nexe_seed_id;
 }

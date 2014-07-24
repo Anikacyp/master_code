@@ -50,9 +50,11 @@ private:
     std::vector<HeapNode> init_seed_spread;
     //每个点的Spread值
     std::map<int,double> node_influence;
+    std::map<int,double> overall_node_influence;
     std::map<int,std::map<int,double> >tmp_node_influence;
     //所选的种子集合
     std::set<int> seedset;
+    //种子和其对应的marginal Spread值，不使用map是因为乱序
     std::vector<int> seeds;
     std::vector<double> spreads;
     
@@ -70,6 +72,7 @@ public:
     void MPP();
     void Dijkstra(int id);
     void recordPath(int source,int dest,double w);
+    
     void buildMIA();
     
 	void run();
